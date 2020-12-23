@@ -1,0 +1,7 @@
+include ':four2one'
+include ':app'
+rootProject.name = "agingProcess"
+include ':IDCardReader'
+include ':BaseLico'
+include ':FaceRec'
+include ':base_dialog'

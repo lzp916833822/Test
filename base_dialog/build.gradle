@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.HanHuoBin'
+
+android {
+    compileSdkVersion(rootProject.ext.myCompileSdkVersion)
+    buildToolsVersion rootProject.ext.myBuildToolsVersion
+
+    defaultConfig {
+
+        minSdkVersion rootProject.ext.myMinSdkVersion
+        targetSdkVersion rootProject.ext.myTargetSdkVersion
+        versionCode 2
+        versionName "1.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat:$CORE_APPCOMPAT"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$CORE_SWIPEREFRESHLAYOUT"}

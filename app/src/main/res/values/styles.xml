@@ -1,0 +1,121 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="CheckStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@drawable/check_box_selector</item>
+        <item name="android:minHeight">@dimen/dp_80</item>
+        <item name="android:textColor">@color/color_222222</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="line_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/color_FAFAFA</item>
+    </style>
+
+    <style name="lottie_style">
+        <item name="android:layout_width">@dimen/dp_50</item>
+        <item name="android:layout_height">@dimen/dp_50</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_marginTop">@dimen/dp_10</item>
+
+    </style>
+
+    <style name="test_item_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/dp_40</item>
+        <item name="android:layout_weight">1.7</item>
+        <item name="android:textColor">@color/color_222222</item>
+        <item name="android:textSize">@dimen/text_size_32</item>
+    </style>
+
+    <style name="state_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/dp_40</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/color_222222</item>
+        <item name="android:textSize">@dimen/text_size_32</item>
+    </style>
+
+    <style name="operating_result_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/dp_20</item>
+        <item name="android:layout_marginEnd">@dimen/dp_20</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/color_222222</item>
+        <item name="android:textSize">@dimen/text_size_32</item>
+    </style>
+
+    <style name="item_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">@dimen/dp_90</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="frame_style">
+        <item name="android:layout_width">@dimen/dp_50</item>
+        <item name="android:layout_height">@dimen/dp_50</item>
+        <item name="android:layout_marginStart">@dimen/dp_30</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:background">@drawable/lottie_bag_select</item>
+
+    </style>
+
+    <style name="bag_style">
+        <item name="android:layout_width">@dimen/dp_50</item>
+        <item name="android:layout_height">@dimen/dp_50</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:src">@mipmap/accomplish_ic</item>
+    </style>
+
+
+    <!-- 全屏幕拉伸-->
+    <style name="layout_full">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+    <!-- 固定自身大小-->
+    <style name="layout_wrap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- 横向分布-->
+    <style name="layout_horizontal" parent="layout_full">
+        <item name="android:layout_width">0px</item>
+    </style>
+
+    <!-- 纵向分布-->
+    <style name="layout_vertical" parent="layout_full">
+        <item name="android:layout_height">0px</item>
+    </style>
+
+    <style name="alert_dialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+    </style>
+</resources>

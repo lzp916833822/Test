@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">老化程序</string>
+    <!--welcome-->
+    <string name="aging_process">安卓老化测试程序</string>
+    <string name="main_camera"> &#160;高拍仪主摄像头</string>
+    <string name="binocular_color_camera"> &#160;双目彩色摄像头</string>
+    <string name="binocular_black_camera">&#160; 双目黑白摄像头</string>
+    <string name="qr_code"> &#160;二维码扫描</string>
+    <string name="id_card"> &#160;二代证</string>
+    <string name="fingerprints">&#160; 指纹仪</string>
+    <string name="ic_card"> &#160; IC卡</string>
+    <string name="cycle_index"> 循环次数</string>
+    <string name="cycle_index_number">请输入循环次数(100–100000)</string>
+    <string name="start">开始</string>
+    <string name="is_run_finish">请等待执行完成在开始</string>
+    <string name="all"> &#160;  全选</string>
+
+    <!--main_camera-->
+    <string name="test_item">&#160;测试项</string>
+    <string name="state">状态</string>
+    <string name="operating_result">操作结果</string>
+    <string name="close">关闭</string>
+    <string name="open_success">打开成功</string>
+    <string name="open_failure">打开失败</string>
+    <string name="stop">停止</string>
+    <string name="take_photo_success">拍照成功</string>
+    <string name="take_photo_failure">拍照失败</string>
+    <string name="identification_failure">识别失败</string>
+    <string name="identification_success">识别成功</string>
+    <string name="for_number">(设置循环次数：</string>
+    <string name="cur_number">；当前循环次数：</string>
+    <string name="stop_for">请先停止当前操作</string>
+    <string name="please_insert_sd_hint" translatable="false">请插入SD Card</string>
+    <string name="SD_Card_has_reached_hint" translatable="false">内存已达到80%，请及时导出</string>
+
+    <!--提示-->
+    <string name="cancel" translatable="false">取消</string>
+    <string name="enter" translatable="false">确认</string>
+    <string name="url" translatable="false">URL</string>
+    <string name="look" translatable="false">查看</string>
+    <string name="whether_to_restore_factory_configuration" translatable="false">是否要恢复出厂配置？</string>
+
+
+
+</resources>

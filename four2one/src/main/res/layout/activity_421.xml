@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Four2oneActivity" >
+
+    <Button
+        android:id="@+id/btnConn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="btnClick"
+        android:text="@string/conn" />
+
+<!--    <Button-->
+<!--        android:id="@+id/btnID"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_toRightOf="@id/btnConn"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="@string/id" />-->
+
+    <Button
+        android:id="@+id/btnSB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/btnConn"
+        android:onClick="btnClick"
+        android:text="@string/sb" />
+
+<!--    <Button-->
+<!--        android:id="@+id/btnGJ"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_toRightOf="@id/btnSB"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="@string/gj" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnSFZ"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_toRightOf="@id/btnGJ"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="@string/szf" />-->
+
+    <Button
+        android:id="@+id/btnIC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnConn"
+        android:onClick="btnClick"
+        android:text="@string/ic" />
+
+    <Button
+        android:id="@+id/btnMAG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnConn"
+        android:layout_toRightOf="@id/btnIC"
+        android:onClick="btnClick"
+        android:text="@string/mag" />
+
+<!--    <Button-->
+<!--        android:id="@+id/btnM1"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/btnConn"-->
+<!--        android:layout_toRightOf="@id/btnMAG"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="@string/M1" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn4442"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/btnIC"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="4442 Test" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn4428"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/btnIC"-->
+<!--        android:layout_toRightOf="@id/btn4442"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="4428 Test" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnat24"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/btnIC"-->
+<!--        android:layout_toRightOf="@id/btn4428"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="AT24" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnNFC"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/btnM1"-->
+<!--        android:onClick="btnClick"-->
+<!--        android:text="NFC Test" />-->
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnMAG"
+        android:layout_marginTop="10dip" >
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tip"
+            android:singleLine="false"
+            android:textSize="18sp" />
+    </ScrollView>
+
+</RelativeLayout>

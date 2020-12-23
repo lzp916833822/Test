@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/tools"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/dialog_background"
+    android:gravity="center"
+    android:minWidth="300dp"
+    android:minHeight="@dimen/dp_150"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_20">
+
+
+    <com.hb.dialog.myDialog.ProgressWheel
+        android:id="@+id/progress_wheel"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        wheel:matProg_barColor="#5588FF"
+        wheel:matProg_progressIndeterminate="true" />
+
+    <TextView
+        android:id="@+id/downloadingTv"
+        android:layout_width="@dimen/dp_150"
+        android:layout_height="@dimen/dp_150"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_36"
+        android:visibility="gone" />
+
+
+    <ImageView
+        android:id="@+id/hintIv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_20"
+        android:contentDescription="@string/app_name"
+        android:scaleType="center"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/hintTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:maxLines="3"
+        android:textColor="@color/color_222222"
+        android:textSize="@dimen/text_size_36" />
+
+
+</LinearLayout>

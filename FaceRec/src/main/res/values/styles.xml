@@ -1,0 +1,20 @@
+<resources>
+
+
+
+    <declare-styleable name="SystemKeyboard">
+        <attr name="xmlLayoutResId"/>
+        <attr format="reference" name="keyViewbg"/>
+        <attr format="boolean" name="isRandom"/>
+    </declare-styleable>
+
+    <declare-styleable name="SystemKeyBoardEditText">
+        <attr format="integer" name="xmlLayoutResId"/>
+        <attr name="keyViewbg"/>
+        <attr format="boolean" name="outSideCancel"/>
+        <attr format="boolean" name="space"/>
+
+    </declare-styleable>
+
+
+</resources>

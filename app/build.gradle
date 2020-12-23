@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.objectbox'
+
+android {
+    compileSdkVersion(rootProject.ext.myCompileSdkVersion)
+    buildToolsVersion rootProject.ext.myBuildToolsVersion
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    defaultConfig {
+        applicationId "com.eloam.process"
+
+        minSdkVersion rootProject.ext.myMinSdkVersion
+        targetSdkVersion rootProject.ext.myTargetSdkVersion
+        versionCode 11
+        versionName "1.1.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            //设置支持的SO库架构
+            abiFilters "armeabi-v7a"
+        }
+
+        sourceSets {
+            main {
+                assets.srcDirs = ['assets']
+                jniLibs.srcDirs = ['libs']
+
+            }
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.appcompat:appcompat:$CORE_APPCOMPAT"
+    implementation "androidx.core:core-ktx:$CORE_KTX"
+    implementation "androidx.constraintlayout:constraintlayout:$CORE_CONSTRAINTLAYOUT"
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.tencent.bugly:crashreport:3.2.33'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    implementation 'com.tencent.bugly:nativecrashreport:3.7.471'
+    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版
+
+    implementation 'com.airbnb.android:lottie:3.4.2'
+
+    //Base
+    implementation project(':BaseLico')
+    //人证核验+UVC
+    implementation project(':FaceRec')
+    //身份证模块
+    implementation project(':IDCardReader')
+    //baseDialog
+    implementation project(":base_dialog")
+
+    //四证合一
+    implementation project(":four2one")
+
+    // Glide图片加载
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    //LiveDataBus
+    implementation 'com.jeremyliao:live-event-bus-x:1.7.2'
+
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def date = new Date().format("yyyy-MM-dd-HH-mm", TimeZone.getTimeZone("GMT+08"))
+            if (variant.buildType.name == 'debug') {
+                outputFileName = "agingProcess_${date}_${versionName}_debug.apk"
+            }
+            if (variant.buildType.name == 'release') {
+                outputFileName = "agingProcess_${date}_${versionName}_release.apk"
+            }
+        }
+    }
+}

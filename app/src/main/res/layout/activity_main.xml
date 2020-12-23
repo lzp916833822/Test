@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/top_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp_40"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dp_40">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                style="@style/item_style"
+                android:minHeight="@dimen/dp_80">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_30"
+                    android:minWidth="@dimen/dp_50" />
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/test_item"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/text_size_28" />
+
+                <TextView
+                    style="@style/state_style"
+                    android:text="@string/state"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/text_size_28" />
+
+                <TextView
+                    style="@style/operating_result_style"
+                    android:text="@string/operating_result"
+                    android:textColor="@color/color_666666"
+                    android:textSize="@dimen/text_size_28" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/main_camera_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/main_camera_fl"
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/main_camera_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/mainCameraAnim"
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/main_camera" />
+
+                <TextView
+                    android:id="@+id/main_camera_state_tv"
+
+                    style="@style/state_style" />
+
+                <TextView
+                    android:id="@+id/main_camera_result_tv"
+                    style="@style/operating_result_style" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/binocular_color_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/binocular_color_fl"
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/binocular_color_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/binocular_color_anim"
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/binocular_color_camera" />
+
+                <TextView
+                    android:id="@+id/binocular_color_state_tv"
+                    style="@style/state_style" />
+
+                <TextView
+                    android:id="@+id/binocular_color_result_tv"
+                    style="@style/operating_result_style" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/binocular_black_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/binocular_black_fl"
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/binocular_black_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/binocular_black_anim"
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/binocular_black_camera" />
+
+                <TextView
+                    android:id="@+id/binocular_black_state_tv"
+                    style="@style/state_style" />
+
+                <TextView
+                    android:id="@+id/binocular_black_result_tv"
+                    style="@style/operating_result_style" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/qr_code_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/qr_code_fl"
+
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/qr_code_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/qr_code_anim"
+
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/qr_code" />
+
+                <TextView
+                    android:id="@+id/qr_code_state_tv"
+                    style="@style/state_style" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/qr_code_result_tv"
+                        style="@style/operating_result_style" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/qr_code_edt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:maxLines="2" />
+
+
+                </FrameLayout>
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/id_card_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/id_card_fl"
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/id_card_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/id_card_anim"
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/id_card" />
+
+                <TextView
+                    android:id="@+id/id_card_state_tv"
+                    style="@style/state_style" />
+
+                <TextView
+                    android:id="@+id/id_card_result_tv"
+                    style="@style/operating_result_style" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/fingerprints_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/fingerprints_fl"
+
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/fingerprints_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/fingerprints_anim"
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/fingerprints" />
+
+                <TextView
+                    android:id="@+id/fingerprints_state_tv"
+                    style="@style/state_style" />
+
+                <TextView
+                    android:id="@+id/fingerprints_result_tv"
+                    style="@style/operating_result_style" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/ic_card_ll"
+                style="@style/item_style"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/ic_card_fl"
+                    style="@style/frame_style">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ic_card_iv"
+                        style="@style/bag_style" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/ic_card_anim"
+                        style="@style/lottie_style"
+                        android:layout_gravity="center"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="loading.json"
+                        app:lottie_loop="true" />
+                </FrameLayout>
+
+
+                <TextView
+                    style="@style/test_item_style"
+                    android:text="@string/ic_card" />
+
+                <TextView
+                    android:id="@+id/ic_card_state_tv"
+                    style="@style/state_style" />
+
+                <TextView
+                    android:id="@+id/ic_card_result_tv"
+                    style="@style/operating_result_style"
+
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/color_FAFAFA" />
+
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextureView
+                        android:id="@+id/mainTexture"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:visibility="gone" />
+
+                    <TextureView
+                        android:id="@+id/binocularColorTexture"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:visibility="gone" />
+
+                    <TextureView
+                        android:id="@+id/binocularBlackTexture"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:visibility="gone" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/mainIv"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:visibility="gone" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/binocularColorIv"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:visibility="gone" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/binocularBlackIv"
+                        android:layout_width="360dp"
+                        android:layout_height="280dp"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:visibility="gone" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </HorizontalScrollView>
+
+
+            <TextView
+                android:id="@+id/number_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:text="@string/for_number"
+                android:textColor="@color/color_222222"
+                android:textSize="@dimen/text_size_32" />
+
+            <TextView
+                android:id="@+id/startTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_32"
+                android:layout_marginTop="@dimen/dp_50"
+                android:layout_marginEnd="@dimen/dp_32"
+                android:layout_marginBottom="@dimen/dp_40"
+                android:background="@drawable/start_btn_selector"
+                android:gravity="center"
+                android:minHeight="@dimen/dp_80"
+                android:text="@string/stop"
+                android:textColor="@color/white"
+                android:textSize="34sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
