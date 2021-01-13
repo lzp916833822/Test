@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
 import com.eloam.process.callBack.DownloadListener
+import com.eloam.process.ui.WelcomeActivity
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.File
@@ -175,7 +176,7 @@ object ImageFileUtil {
                     context.packageName + ".fileprovider",
                     file
                 ) //在AndroidManifest中的android:authorities值
-                LogUtils.d("======", "file=${file.path}")
+                LogUtils.d("======", "file=${file.path}", WelcomeActivity.UPLOADING_TIME,1)
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) //添加这一句表示对目标应用临时授权该Uri所代表的文件
                 install.setDataAndType(apkUri, "application/vnd.android.package-archive")
             } else {

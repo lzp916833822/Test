@@ -26,31 +26,31 @@ object LogUtils {
         LogUtils.logFlag = logFlag
     }
 
-    fun i(tag: String?, str: String?) {
+    fun i(tag: String?, str: String?, time: Long, type: Int) {
         if (logFlag) {
             Log.i(tag, unicodeToUTF_8(str))
-            MyLocalLog.i(tag!!, str!!)
+            MyLocalLog.i(tag!!, str!!, time, type)
         }
     }
 
-    fun d(tag: String?, str: String?) {
+    fun d(tag: String?, str: String?, time: Long, type: Int) {
         if (logFlag) {
             Log.d(tag, unicodeToUTF_8(str))
-            MyLocalLog.d(tag!!, str!!)
+            MyLocalLog.d(tag!!, str!!, time, type)
         }
     }
 
-    fun v(tag: String?, str: String?) {
+    fun v(tag: String?, str: String?, time: Long, type: Int) {
         if (logFlag) {
             Log.v(tag, unicodeToUTF_8(str))
-            MyLocalLog.v(tag!!, str!!)
+            MyLocalLog.v(tag!!, str!!, time, type)
         }
     }
 
-    fun e(tag: String?, str: String?) {
+    fun e(tag: String?, str: String?, time: Long, type: Int) {
         if (logFlag) {
             Log.e(tag, unicodeToUTF_8(str))
-            MyLocalLog.e(tag!!, str!!)
+            MyLocalLog.e(tag!!, str!!, time, type)
         }
     }
 

@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.hardware.usb.UsbDevice
 import android.os.Build
 import android.text.Html
+import android.text.TextUtils
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
@@ -15,13 +16,14 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.eloam.process.R
 import com.eloam.process.callBack.*
-import com.eloam.process.data.entity.StatueAnim
-import com.eloam.process.data.entity.StatueOpen
-import com.eloam.process.data.entity.StatueOpenDevice
-import com.eloam.process.data.entity.StatueResult
+import com.eloam.process.data.ObjectBox
+import com.eloam.process.data.entity.*
 import com.eloam.process.dialog.HintDialog
+import com.eloam.process.dialog.SweetAlertDialog
 import com.eloam.process.dialog.SweetAlertDialog.Companion.NORMAL_TYPE
+import com.eloam.process.ui.WelcomeActivity.Companion.UPLOADING_TIME
 import com.eloam.process.utils.*
+import com.eloam.process.utils.Uuid.getUUID
 import com.eloam.process.viewmodels.MainViewModel
 import com.example.scarx.idcardreader.utils.IdCardRenderUtils
 import com.example.scarx.idcardreader.utils.imp.MyCallBack
@@ -29,12 +31,15 @@ import com.face.cn.ImageStack
 import com.face.sweepplus.data.`interface`.HintDialogBtnListener
 import com.serenegiant.usb.IFrameCallback
 import com.serenegiant.usb.USBMonitor
+import com.serenegiant.utils.UIThreadHelper
 import com.zkteco.android.biometric.core.device.ParameterHelper
 import com.zkteco.android.biometric.core.device.TransportType
 import com.zkteco.android.biometric.core.utils.LogHelper
 import com.zkteco.android.biometric.core.utils.ToolUtils
 import com.zkteco.android.biometric.module.idcard.IDCardReaderFactory
 import com.zkteco.android.biometric.module.idcard.meta.IDCardInfo
+import io.objectbox.Box
+import io.objectbox.kotlin.boxFor
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.top_layout.*
 import kotlinx.coroutines.Dispatchers
@@ -56,14 +61,21 @@ class MainActivity : BaseActivity() {
         const val WIGHT = 640//高拍仪副摄像头
         const val HEIGHT = 480//高拍仪副摄像头
         private const val STORAGE_HINT_NUMBER = 100 //执行多少次数检测内存提醒
+        const val LIST_CODE = "listCode"
+        const val NUMBER = "number"
+        const val TEST_CODE = "test_Code"
 
-        var Intent.listCode by IntegerArrayListExtra()
-        var Intent.number by IntegerExtra()
 
-        fun startIntent(context: Context, mutableList: ArrayList<Int>, number: Int) {
+        fun startIntent(
+            context: Context,
+            mutableList: ArrayList<Int>,
+            number: Int,
+            testCode: String
+        ) {
             val intent = Intent(context, MainActivity::class.java)
-            intent.listCode = mutableList
-            intent.number = number
+            intent.putIntegerArrayListExtra(LIST_CODE, mutableList)
+            intent.putExtra(NUMBER, number)
+            intent.putExtra(TEST_CODE, testCode)
             context.startActivity(intent)
 
         }
@@ -92,33 +104,101 @@ class MainActivity : BaseActivity() {
     private var storageHintTime = 1//累计次数
     private var mCurNumber = 0
     private var mAllNumber = 10000
+    private var mTestCode = ""
+    private lateinit var mMyLogInfo: MyLogInfo
     private lateinit var listCode: ArrayList<Int>
+    private var mSweetAlertDialog: SweetAlertDialog? = null
+
+    private var adInfoBox: Box<MyLogInfo>
+
     private val mainViewModel: MainViewModel by viewModel()
 
     override fun layoutId() = R.layout.activity_main
 
     init {
         context = this
+        adInfoBox = ObjectBox.boxStore.boxFor()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {
         getIntentDta(intent)
+        saveData()
         register()
-        intiView()
+        initView()
         addObserver()
         showView()
-        LogUtils.i(TAG, getDeviceSN())
+        LogUtils.i(TAG, getDeviceSN(), UPLOADING_TIME, 1)
+    }
+
+    private fun saveData() {
+        val sdMouthPath = SDCardUtils.getSDMouthPath(SDCardUtils.getLogFile())
+        val filePath =
+            File(sdMouthPath, MyLocalLog.myLogSdf.format(UPLOADING_TIME) + MyLocalLog.MYLOGFILEName)
+        adInfoBox.put(getMyLogInfo(filePath))
+
+    }
+
+    private fun getMyLogInfo(filePath: File): MyLogInfo {
+        mMyLogInfo = MyLogInfo(
+            0,
+            getUUID(context!!)!!,
+            getDeviceSN(),
+            UPLOADING_TIME,
+            mTestCode,
+            getString(R.string.app_name),
+            mainViewModel.getDeviceInfo(),
+            filePath.path
+        )
+        return mMyLogInfo
+    }
+
+    override fun initView() {
+        backIv.setImageResource(R.drawable.ic_back)
+        setNumberText()
+        backIv.setOnClickListener {
+            onBackIv()
+        }
+        startTv.setOnClickListener {
+            onStartTv()
+        }
+    }
+
+
+    private fun showDialog(
+        type: Int,
+        hintText: String,
+        loading: String
+    ) {
+        UIThreadHelper.runOnUiThread {
+            if (mSweetAlertDialog == null) {
+                mSweetAlertDialog = SweetAlertDialog(mContext)
+            }
+
+            if (TextUtils.isEmpty(loading)) {
+                mSweetAlertDialog?.setView(type, hintText)
+            } else {
+                mSweetAlertDialog?.setView(type, hintText, loading)
+            }
+            mSweetAlertDialog?.setCanceledOnTouchOutside(false)
+            if (!mSweetAlertDialog!!.isShowing) {
+                mSweetAlertDialog?.show()
+            }
+
+        }
+
     }
 
     @SuppressLint("HardwareIds")
-    private fun getDeviceSN(): String? {
+    private fun getDeviceSN(): String {
         return Build.SERIAL
     }
 
     private fun getIntentDta(intent: Intent) = with(IntentOptions) {
-        listCode = intent.listCode
-        mAllNumber = intent.number
+        listCode = intent.getIntegerArrayListExtra(LIST_CODE)
+        mAllNumber = intent.getIntExtra(NUMBER, 0)
+        mTestCode = intent.getStringExtra(TEST_CODE)
 
     }
 
@@ -136,16 +216,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun intiView() {
-        backIv.setImageResource(R.drawable.ic_back)
-        setNumberText()
-        backIv.setOnClickListener {
-            onBackIv()
-        }
-        startTv.setOnClickListener {
-            onStartTv()
-        }
-    }
 
     private fun onBackIv() {
         if (isFlag) {
@@ -159,16 +229,19 @@ class MainActivity : BaseActivity() {
         if (isFlag) {
             startTv.text = getString(R.string.start)
             isFlag = false
+            uploadingLogFile()
         } else {
             if (!isRunFinish) {
                 JUtils.onToastLong(getString(R.string.is_run_finish))
                 return
             }
-
+            UPLOADING_TIME = System.currentTimeMillis()
+            saveData()
             isFlag = true
             clearCurNumber()
             postNext()
             startTv.text = getString(R.string.stop)
+
         }
 
 
@@ -176,7 +249,7 @@ class MainActivity : BaseActivity() {
 
     private fun clearCurNumber() {
         val number = mCurNumber / listCode.size
-        LogUtils.i(TAG, "$number")
+        LogUtils.i(TAG, "$number", UPLOADING_TIME, 1)
         if (number >= mAllNumber) {
             mCurNumber = 0
         }
@@ -188,7 +261,7 @@ class MainActivity : BaseActivity() {
         val text =
             "$forNumber$mAllNumber$curNumber<font color=\"#0D76DE\">${mCurNumber / listCode.size}</font>)"
         number_tv.text = Html.fromHtml(text)
-        LogUtils.i(TAG, "mCurNumber==${mCurNumber / listCode.size}")
+        LogUtils.i(TAG, "mCurNumber==${mCurNumber / listCode.size}", UPLOADING_TIME, 1)
     }
 
 
@@ -200,7 +273,7 @@ class MainActivity : BaseActivity() {
                     ctrlBlock: USBMonitor.UsbControlBlock
                 ) {
                     val pid = String.format("%x", device.productId)
-                    LogUtils.d(TAG, "connect: $pid")
+                    LogUtils.d(TAG, "connect: $pid", UPLOADING_TIME, 1)
                     when (pid) {
                         RGB_CAMERA -> {
                             openRgbCamera(ctrlBlock)
@@ -215,6 +288,13 @@ class MainActivity : BaseActivity() {
                         }
 
                         else -> {
+                            LogUtils.i(
+                                TAG,
+                                "pid error,Unable to find PID.==${pid}",
+                                UPLOADING_TIME,
+                                1
+                            )
+
                             openDeputyCamera(ctrlBlock)
                         }
 
@@ -299,7 +379,7 @@ class MainActivity : BaseActivity() {
                 setImage(type, bitmap)
                 val path = ImageFileUtil.saveBitmap(bitmap, type, ImageFileUtil.time)
                 postResult(listCode[mCurNumber % listCode.size], getResult(File(path)), "")
-                LogUtils.i(TAG, "path==$path ")
+                LogUtils.i(TAG, "path==$path ", UPLOADING_TIME, 1)
             }
         }
     }
@@ -344,11 +424,42 @@ class MainActivity : BaseActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     private fun addObserver() {
+        uploadingFileObserver()
         openState()
         statueVisibility()
         statue()
         statueAnim()
         statueResult()
+    }
+
+    private fun uploadingFileObserver() {
+        mainViewModel.uploadingFileResult.observe(this, androidx.lifecycle.Observer {
+            when (it) {
+                0 -> {
+                    mSweetAlertDialog?.dismiss()
+                    startTv.isEnabled = true
+                    deleteData()
+                }
+                1 -> {
+                    mSweetAlertDialog?.dismiss()
+                    startTv.isEnabled = true
+                }
+            }
+        })
+    }
+
+    /**
+     *上传成功，删除本地数据
+     */
+    private fun deleteData() {
+        val myLogInfo =
+            adInfoBox.query().equal(MyLogInfo_.reportTime, mMyLogInfo.reportTime)
+                .build().find()
+        myLogInfo.forEach { it2 ->
+            val remove = adInfoBox.remove(it2.id)
+            LogUtils.i(TAG, "remove=$remove id=${it2.id}", UPLOADING_TIME, 1)
+
+        }
     }
 
     private fun statueResultNext(state: Int) {
@@ -493,38 +604,65 @@ class MainActivity : BaseActivity() {
         mainViewModel.statueOpenDevice.observe(this, androidx.lifecycle.Observer {
             when (it.type) {
                 0 -> {
-                    main_camera_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.main_camera)
+                    main_camera_state_tv.text = text
                     main_camera_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
                 }
 
                 1 -> {
-                    binocular_color_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.binocular_color_camera)
+                    binocular_color_state_tv.text = text
                     binocular_color_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
+
                 }
 
                 2 -> {
-                    binocular_black_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.binocular_black_camera)
+                    binocular_black_state_tv.text = text
                     binocular_black_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
+
                 }
 
                 3 -> {
-                    qr_code_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.qr_code)
+                    qr_code_state_tv.text = text
                     qr_code_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
+
                 }
 
                 4 -> {
-                    id_card_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.id_card)
+                    id_card_state_tv.text = text
                     id_card_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
+
                 }
 
                 5 -> {
-                    fingerprints_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.fingerprints)
+                    fingerprints_state_tv.text = text
                     fingerprints_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
+
                 }
 
                 6 -> {
-                    ic_card_state_tv.text = mainViewModel.getOpenDeviceTextSting(it)
+                    val text = mainViewModel.getOpenDeviceTextSting(it)
+                    val des = getString(R.string.ic_card)
+                    ic_card_state_tv.text = text
                     ic_card_state_tv.setTextColor(mainViewModel.getOpenDeviceTextColor(it))
+                    LogUtils.i(TAG, "$des$text", UPLOADING_TIME, 1)
+
                 }
 
                 else -> {
@@ -811,7 +949,7 @@ class MainActivity : BaseActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             delay(2000)
             val imgInfoKj = imageStack.pullImageInfo()
-            LogUtils.d(TAG, "getPullImageInfo ${imgInfoKj.isNew}")
+            LogUtils.d(TAG, "getPullImageInfo ${imgInfoKj.isNew}", UPLOADING_TIME, 1)
             if (imgInfoKj.isNew) {
                 getImageData(imgInfoKj.data, type)
             } else {
@@ -838,7 +976,7 @@ class MainActivity : BaseActivity() {
      * 执行到最后一项，清空数据，显示运行次数结果
      */
     private suspend fun nextAsLast() {
-        LogUtils.d(TAG, "nextAsLast ${mCurNumber % listCode.size} ")
+        LogUtils.d(TAG, "nextAsLast ${mCurNumber % listCode.size} ", UPLOADING_TIME, 1)
         if (mCurNumber % listCode.size == 0) {
             setNumberText()
             stopNext()
@@ -854,6 +992,7 @@ class MainActivity : BaseActivity() {
         if (mCurNumber / listCode.size >= mAllNumber) {
             isFlag = false
             startTv.text = getString(R.string.start)
+            uploadingLogFile()
         }
     }
 
@@ -919,7 +1058,7 @@ class MainActivity : BaseActivity() {
 
         idCardReaderUtils.readerIdCard(idCardReader, CountDownLatch(1), object : MyCallBack {
             override fun onSuccess(idCardInfo: IDCardInfo?) {
-                LogUtils.d(TAG, "readerIdCard onSuccess")
+                LogUtils.d(TAG, "readerIdCard onSuccess", UPLOADING_TIME, 1)
 
                 postResult(listCode[mCurNumber % listCode.size], 1, "")
                 idCardReaderUtils.setbStoped(true)
@@ -928,7 +1067,7 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onFail(error: String?) {
-                LogUtils.d(TAG, "readerIdCard onFail")
+                LogUtils.d(TAG, "readerIdCard onFail", UPLOADING_TIME, 1)
 
             }
 
@@ -959,7 +1098,7 @@ class MainActivity : BaseActivity() {
      */
     private fun storageHint() {
         val type = StorageUtils.readSDCard(this, true)
-        LogUtils.d(WelcomeActivity.TAG, "storageHint$type")
+        LogUtils.d(TAG, "storageHint$type", UPLOADING_TIME, 1)
         if (type == 1) {
             showDialog()
         }
@@ -975,12 +1114,19 @@ class MainActivity : BaseActivity() {
             override fun enter(string: String) {
                 isFlag = false
                 startTv.text = getString(R.string.start)
+                uploadingLogFile()
 
             }
         })
         hintDialog.setView(NORMAL_TYPE, getString(R.string.SD_Card_has_reached_hint))
         hintDialog.show()
 
+    }
+
+    private fun uploadingLogFile() {
+        startTv.isEnabled = false
+        showDialog(NORMAL_TYPE, getString(R.string.loading_waite), "")
+        mainViewModel.uploadTestFiles(mMyLogInfo)
     }
 
 

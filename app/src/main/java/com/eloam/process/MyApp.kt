@@ -2,6 +2,7 @@ package com.eloam.process
 
 import android.app.Application
 import android.content.Context
+import com.eloam.process.data.ObjectBox
 import com.eloam.process.koin.appModule
 import com.eloam.process.utils.CrashHandler
 import com.eloam.process.utils.YuvUtils
@@ -47,6 +48,8 @@ class MyApp : Application() {
             modules(appModule)
         }
         YuvUtils.init(this)
+        ObjectBox.init(this)
+
     }
     /**
     //数据库

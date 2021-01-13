@@ -118,17 +118,78 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:5849295610094142220",
+      "lastPropertyId": "8:5030706936472432572",
+      "name": "MyLogInfo",
+      "properties": [
+        {
+          "id": "1:3430885579659197122",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2582809701096480712",
+          "name": "mac",
+          "type": 9
+        },
+        {
+          "id": "3:7286605034667328942",
+          "name": "sn",
+          "type": 9
+        },
+        {
+          "id": "4:1043940172383081225",
+          "name": "reportTime",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "5:8151170919357786196",
+          "name": "employeeNo",
+          "type": 9
+        },
+        {
+          "id": "6:7890048445796562616",
+          "name": "itemName",
+          "type": 9
+        },
+        {
+          "id": "7:3078538170451614896",
+          "name": "terminalInfo",
+          "type": 9
+        },
+        {
+          "id": "8:5030706936472432572",
+          "name": "filePath",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:5693344162295359797",
+  "lastEntityId": "3:5849295610094142220",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    8330633690662334349
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    7728791088158768602,
+    8933503920996511249,
+    6747971041254627079,
+    4158111750461855346,
+    1292095277799601642,
+    2771127990236309905,
+    2967959998151569982,
+    7431265597052002077
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

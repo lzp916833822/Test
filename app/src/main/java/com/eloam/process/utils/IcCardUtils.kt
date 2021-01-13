@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.eloam.process.callBack.IcCardCallBack
 import com.eloam.process.callBack.IcCardReadCallBack
+import com.eloam.process.ui.WelcomeActivity
 import com.imagpay.Settings
 import com.imagpay.SwipeEvent
 import com.imagpay.SwipeListener
@@ -34,17 +35,17 @@ class IcCardUtils {
         // _handler.setAutoConn(true);
         handler!!.addSwipeListener(object : SwipeListener {
             override fun onStopped(event: SwipeEvent) {
-                LogUtils.d(TAG, "onStopped ${event.value}")
+                LogUtils.d(TAG, "onStopped ${event.value}", WelcomeActivity.UPLOADING_TIME,1)
 
             }
 
             override fun onStarted(event: SwipeEvent) {
-                LogUtils.d(TAG, "onStarted ${event.value}")
+                LogUtils.d(TAG, "onStarted ${event.value}", WelcomeActivity.UPLOADING_TIME,1)
 
             }
 
             override fun onReadData(event: SwipeEvent) {
-                LogUtils.d(TAG, "onReadData ${event.value}")
+                LogUtils.d(TAG, "onReadData ${event.value}", WelcomeActivity.UPLOADING_TIME,1)
 
             }
 
@@ -53,12 +54,12 @@ class IcCardUtils {
             }
 
             override fun onDisconnected(event: SwipeEvent) {
-                LogUtils.d(TAG, "onDisconnected ${event.value}")
+                LogUtils.d(TAG, "onDisconnected ${event.value}", WelcomeActivity.UPLOADING_TIME,1)
 
             }
 
             override fun onConnected(event: SwipeEvent) {
-                LogUtils.d(TAG, "onConnected ${event.value}")
+                LogUtils.d(TAG, "onConnected ${event.value}", WelcomeActivity.UPLOADING_TIME,1)
 
             }
 
@@ -80,7 +81,7 @@ class IcCardUtils {
 
     private fun connect(icCardCallBack: IcCardCallBack) {
         val connect = handler!!.connect()
-        LogUtils.d(TAG, "IC Card connect code== $connect")
+        LogUtils.d(TAG, "IC Card connect code== $connect", WelcomeActivity.UPLOADING_TIME,1)
         when (connect) {
             USBConstants.USB_NO_PERMISSION -> {
                 handler!!.checkPermission()
@@ -160,7 +161,7 @@ class IcCardUtils {
         try {
             val data = handler!!.getTLVDataByTag(0x5a)
             icCardReadCallBack.onSuccess(data)
-            LogUtils.d(TAG, "Ic card id onSuccess $data")
+            LogUtils.d(TAG, "Ic card id onSuccess $data", WelcomeActivity.UPLOADING_TIME,1)
         } catch (E: Exception) {
             icCardReadCallBack.onSuccess("null")
         }

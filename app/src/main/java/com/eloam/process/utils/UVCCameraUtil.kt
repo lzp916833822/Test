@@ -6,6 +6,7 @@ import android.view.Surface
 import android.view.TextureView
 import com.eloam.process.R
 import com.eloam.process.callBack.OpenStateCallBack
+import com.eloam.process.ui.WelcomeActivity
 import com.serenegiant.usb.DeviceFilter
 import com.serenegiant.usb.IFrameCallback
 import com.serenegiant.usb.USBMonitor
@@ -90,7 +91,7 @@ object UVCCameraUtil {
         }
         for (usbDevice in devList) {
             val productId = String.format("%x", usbDevice!!.productId)
-            LogUtils.e(TAG, "findById: $productId")
+            LogUtils.e(TAG, "findById: $productId", WelcomeActivity.UPLOADING_TIME,1)
             if (productId == pid) {
                 device = usbDevice
                 isPermission = true
@@ -154,11 +155,11 @@ object UVCCameraUtil {
                 mRGBCamera?.startPreview()
                 openStateCallBack.success()
 
-                LogUtils.e(TAG, "打开彩色摄像头成功: ")
+                LogUtils.e(TAG, "打开彩色摄像头成功: ", WelcomeActivity.UPLOADING_TIME,1)
             } else {
                 openStateCallBack.failure()
 
-                LogUtils.e(TAG, "open 彩色 camera failed ing")
+                LogUtils.e(TAG, "open 彩色 camera failed ing", WelcomeActivity.UPLOADING_TIME,1)
             }
 
         }
@@ -209,10 +210,11 @@ object UVCCameraUtil {
                 mIRCamera?.startPreview()
                 openStateCallBack.success()
 
-                LogUtils.e(TAG, "打开红外摄像头成功: ")
+                LogUtils.e(TAG, "打开红外摄像头成功: ", WelcomeActivity.UPLOADING_TIME,1)
             } else {
                 openStateCallBack.failure()
-                LogUtils.e(TAG, "open 红外 camera failed, textureView 没有准备好")
+                LogUtils.e(TAG, "open 红外 camera failed, textureView 没有准备好",
+                    WelcomeActivity.UPLOADING_TIME,1)
             }
         }
     }
@@ -239,7 +241,8 @@ object UVCCameraUtil {
             try {
                 mHighCamera?.setPreviewSize(640, 480, UVCCamera.FRAME_FORMAT_YUYV)
             } catch (e: IllegalArgumentException) {
-                LogUtils.e(TAG, "IllegalArgumentException:  ${e.message}")
+                LogUtils.e(TAG, "IllegalArgumentException:  ${e.message}",
+                    WelcomeActivity.UPLOADING_TIME,1)
                 try {
                     // fallback to YUV mode
                     mHighCamera?.setPreviewSize(
@@ -248,7 +251,8 @@ object UVCCameraUtil {
                         UVCCamera.DEFAULT_PREVIEW_MODE
                     )
                 } catch (e: IllegalArgumentException) {
-                    LogUtils.e(TAG, "IllegalArgumentException: ${e.message}")
+                    LogUtils.e(TAG, "IllegalArgumentException: ${e.message}",
+                        WelcomeActivity.UPLOADING_TIME,1)
                     openStateCallBack.failure()
                     mHighCamera?.destroy()
                     return
@@ -261,11 +265,12 @@ object UVCCameraUtil {
                 mHighCamera?.setPreviewDisplay(mHighPreview)
                 mHighCamera?.startPreview()
                 openStateCallBack.success()
-                LogUtils.e(TAG, "打开高拍仪摄像头成功: ")
+                LogUtils.e(TAG, "打开高拍仪摄像头成功: ", WelcomeActivity.UPLOADING_TIME,1)
             } else {
                 openStateCallBack.failure()
 
-                LogUtils.e(TAG, "open 高拍仪 camera failed, textureView 没有准备好")
+                LogUtils.e(TAG, "open 高拍仪 camera failed, textureView 没有准备好",
+                    WelcomeActivity.UPLOADING_TIME,1)
             }
         }
     }
@@ -294,7 +299,8 @@ object UVCCameraUtil {
             try {
                 mDeputyCamera?.setPreviewSize(640, 480, UVCCamera.FRAME_FORMAT_MJPEG)
             } catch (e: IllegalArgumentException) {
-                LogUtils.e(TAG, "IllegalArgumentException: ${e.message}")
+                LogUtils.e(TAG, "IllegalArgumentException: ${e.message}",
+                    WelcomeActivity.UPLOADING_TIME,1)
                 try {
                     // fallback to YUV mode
                     mDeputyCamera?.setPreviewSize(
@@ -303,7 +309,8 @@ object UVCCameraUtil {
                         UVCCamera.DEFAULT_PREVIEW_MODE
                     )
                 } catch (e: IllegalArgumentException) {
-                    LogUtils.e(TAG, "IllegalArgumentException: ${e.message}")
+                    LogUtils.e(TAG, "IllegalArgumentException: ${e.message}",
+                        WelcomeActivity.UPLOADING_TIME,1)
                     openStateCallBack.failure()
                     mDeputyCamera?.destroy()
                     return
@@ -317,11 +324,12 @@ object UVCCameraUtil {
                 mDeputyCamera?.startPreview()
                 openStateCallBack.success()
 
-                LogUtils.e(TAG, "打开副高拍仪摄像头成功: ")
+                LogUtils.e(TAG, "打开副高拍仪摄像头成功: ", WelcomeActivity.UPLOADING_TIME,1)
             } else {
                 openStateCallBack.failure()
 
-                LogUtils.e(TAG, "open 高拍仪 camera failed, textureView 没有准备好")
+                LogUtils.e(TAG, "open 高拍仪 camera failed, textureView 没有准备好",
+                    WelcomeActivity.UPLOADING_TIME,1)
             }
         }
     }
@@ -336,7 +344,7 @@ object UVCCameraUtil {
         mRGBCamera = null
         mRGBPreview?.release()
         mRGBPreview = null
-        LogUtils.e(TAG, "close releaseRGBCamera: ")
+        LogUtils.e(TAG, "close releaseRGBCamera: ", WelcomeActivity.UPLOADING_TIME,1)
 
     }
 
@@ -350,7 +358,7 @@ object UVCCameraUtil {
         mIRCamera = null
         mIRPreview?.release()
         mIRPreview = null
-        LogUtils.e(TAG, "close releaseIRCamera: ")
+        LogUtils.e(TAG, "close releaseIRCamera: ", WelcomeActivity.UPLOADING_TIME,1)
 
     }
 
@@ -364,7 +372,7 @@ object UVCCameraUtil {
         mHighCamera = null
         mHighPreview?.release()
         mHighPreview = null
-        LogUtils.e(TAG, "close releaseHighCamera: ")
+        LogUtils.e(TAG, "close releaseHighCamera: ", WelcomeActivity.UPLOADING_TIME,1)
 
     }
 
@@ -378,7 +386,7 @@ object UVCCameraUtil {
         mDeputyCamera = null
         mDeputyPreview?.release()
         mDeputyPreview = null
-        LogUtils.e(TAG, "close releaseDeputyCamera: ")
+        LogUtils.e(TAG, "close releaseDeputyCamera: ", WelcomeActivity.UPLOADING_TIME,1)
 
     }
 

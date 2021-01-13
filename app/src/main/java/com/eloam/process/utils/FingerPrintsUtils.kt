@@ -10,6 +10,7 @@ import android.hardware.usb.UsbManager
 import com.eloam.process.MyApp
 import com.eloam.process.callBack.FingerprintsCallBack
 import com.eloam.process.callBack.OpenFingerprintsCallBack
+import com.eloam.process.ui.WelcomeActivity
 import com.za.finger.ZAandroid
 import com.zaz.sdk.ukey.Tool
 import kotlinx.coroutines.delay
@@ -53,16 +54,16 @@ class FingerPrintsUtils {
             }
 
             if (zazapi != null && zazapi?.ZAZGenChar(DEV_ADD_R, CHAR_BUFFER_A) == PS_OK) {
-                LogUtils.d(TAG, "readChar Success")
+                LogUtils.d(TAG, "readChar Success", WelcomeActivity.UPLOADING_TIME,1)
                 fingerprintsCallBack?.onSuccess("PS_OK")
             } else {
                 fingerprintsCallBack?.onFailure()
-                LogUtils.d(TAG, "readChar failure")
+                LogUtils.d(TAG, "readChar failure", WelcomeActivity.UPLOADING_TIME,1)
 
             }
         } catch (e: Exception) {
             fingerprintsCallBack?.onFailure()
-            LogUtils.e(TAG, "readChar ${e.message}")
+            LogUtils.e(TAG, "readChar ${e.message}", WelcomeActivity.UPLOADING_TIME,1)
         }
 
 
@@ -84,17 +85,19 @@ class FingerPrintsUtils {
                 if (ret == ZAandroid.DEVICE_SUCCESS) {
                     mhKey = key[0]
                     mOpenFingerprintsCallBack?.success()
-                    LogUtils.i(TAG, "open device success key :" + Tool.int2HexStr(mhKey))
+                    LogUtils.i(TAG, "open device success key :" + Tool.int2HexStr(mhKey),
+                        WelcomeActivity.UPLOADING_TIME,1)
                 } else {
                     mOpenFingerprintsCallBack?.failure()
-                    LogUtils.i(TAG, "open device fail errCode :$ret") //Tool.int2HexStr(ret));
+                    LogUtils.i(TAG, "open device fail errCode :$ret",
+                        WelcomeActivity.UPLOADING_TIME,1) //Tool.int2HexStr(ret));
                 }
             } catch (e: Exception) {
                 mOpenFingerprintsCallBack?.failure()
-                LogUtils.e(TAG, "Exception: => ${e.message}")
+                LogUtils.e(TAG, "Exception: => ${e.message}", WelcomeActivity.UPLOADING_TIME,1)
             }
         } else {
-            LogUtils.e(TAG, "openFingerPrints: => failure")
+            LogUtils.e(TAG, "openFingerPrints: => failure", WelcomeActivity.UPLOADING_TIME,1)
             mOpenFingerprintsCallBack?.failure()
 
         }
@@ -106,7 +109,8 @@ class FingerPrintsUtils {
         for (device in mUsbManager!!.deviceList.values) {
             if (device.vendorId == 8457 && device.productId == 30264) {
                 mUsbDevice = device
-                LogUtils.i(TAG, "requestPermission: =>${mUsbManager!!.hasPermission(mUsbDevice)}")
+                LogUtils.i(TAG, "requestPermission: =>${mUsbManager!!.hasPermission(mUsbDevice)}",
+                    WelcomeActivity.UPLOADING_TIME,1)
                 if (!mUsbManager!!.hasPermission(mUsbDevice)) {
                     mPermissionIntent =
                         PendingIntent.getBroadcast(MyApp.getApplication(), 0, Intent(ACTION_USB_PERMISSION), 0)
@@ -143,7 +147,7 @@ class FingerPrintsUtils {
         // 收到消息
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
-            LogUtils.i(TAG, "UsbManager==$action")
+            LogUtils.i(TAG, "UsbManager==$action", WelcomeActivity.UPLOADING_TIME,1)
             when {
                 UsbManager.ACTION_USB_DEVICE_ATTACHED == action -> {
 
@@ -152,7 +156,8 @@ class FingerPrintsUtils {
 //                    mOpenFingerprintsCallBack?.failure()
                     zazapi?.ZAZCloseDeviceEx()
                     zazapi = null
-                    LogUtils.e(TAG, "BroadcastReceiver: => failure")
+                    LogUtils.e(TAG, "BroadcastReceiver: => failure",
+                        WelcomeActivity.UPLOADING_TIME,1)
 
                 }
 

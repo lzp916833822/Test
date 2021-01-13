@@ -1,6 +1,6 @@
 package com.eloam.process.data
 
-import com.eloam.process.data.services.ApiService
+import com.eloam.process.service.ApiService
 import okhttp3.RequestBody
 import org.lico.core.base.BaseModel
 
@@ -11,9 +11,8 @@ import org.lico.core.base.BaseModel
  */
 class DataRepository(private val apiService: ApiService) : BaseModel() {
 
-      suspend fun postVisitorInfo(body: RequestBody) = apiService.postVisitor(body)
 
-      suspend fun getAdData(body: RequestBody) = apiService.getAdData(body)
+    suspend fun findReportTerminalLog(body: RequestBody) = apiService.findReportTerminalLog(body)
 
-      suspend fun get(body: RequestBody) = apiService.get(body)
+    suspend fun uploadTestFiles(body: RequestBody) = apiService.uploadTestFiles(body)
 }

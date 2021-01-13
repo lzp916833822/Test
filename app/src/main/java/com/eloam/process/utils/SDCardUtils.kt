@@ -55,6 +55,10 @@ object SDCardUtils {
         return null
     }
 
+    @JvmStatic
+    fun getLogFile(): String {
+        return "MyLog"
+    }
 
     /**
      * 单位:M

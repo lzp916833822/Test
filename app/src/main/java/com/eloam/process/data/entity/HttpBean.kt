@@ -5,24 +5,25 @@ import io.objectbox.annotation.Id
 import java.io.Serializable
 
 /**
- * @author: lico
+ * @author: lzp
  * @create：2020/6/3
  * @describe：
  */
-data class UserInfo(
-    var sbbh: String,
-    var csrq: String,
-    var hjdxz: String,
-    var mz: String,
-    var sfzh: String,
-    var xb: String,
-    var xm: String,
-    var zjzp: String,
-    var xczp: String,
-    var zw: String)
+@Entity
+data class MyLogInfo(
+    @Id var id: Long = 0,
+    var mac: String,
+    var sn: String,
+    var reportTime: Long,
+    var employeeNo: String,
+    var itemName: String,
+    var terminalInfo: String,
+    var filePath: String
+)
 
 data class PostData(
-    var data: String)
+    var data: String
+)
 
 data class AdPost(
     var sbbh: String,
@@ -53,8 +54,9 @@ data class AdInfo(
     var video3: String,
     var video4: String,
     var video5: String
-):Serializable
+) : Serializable
 
 data class InfoResult(
     var message: String,
-    var success: Boolean)
+    var success: Boolean
+)

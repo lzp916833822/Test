@@ -5,10 +5,12 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.KeyEvent
+import android.view.View
 import com.eloam.process.R
 import com.eloam.process.dialog.SweetAlertDialog
 import com.eloam.process.utils.LogUtils
 import com.eloam.process.utils.StorageUtils
+import com.eloam.process.utils.WiFi
 import com.eloam.process.viewmodels.WelcomeViewModel
 import com.hjq.permissions.OnPermission
 import com.hjq.permissions.Permission
@@ -22,13 +24,15 @@ import java.util.*
 import kotlin.system.exitProcess
 
 /**
- * @author: lico
+ * @author: lzp
  * @create：2020/6/3
  * @describe：
  */
 class WelcomeActivity : BaseActivity() {
     companion object {
         const val TAG = "WelcomeActivity"
+        var UPLOADING_TIME: Long = System.currentTimeMillis()
+
     }
 
 
@@ -36,11 +40,25 @@ class WelcomeActivity : BaseActivity() {
     private val welcomeViewModel: WelcomeViewModel by viewModel()
     private var allIsCheck = false
     private var number = 0
+    private var mTestWork = ""
     override fun initData() {
         getPermission()
-        initView()
-        onClickListener()
-        storageHint()
+        welcomeViewModel.listCheckBox.add(mainCameraBox)
+        welcomeViewModel.listCheckBox.add(binocularColorBox)
+        welcomeViewModel.listCheckBox.add(binocularBlackBox)
+        welcomeViewModel.listCheckBox.add(qrCodeBox)
+        welcomeViewModel.listCheckBox.add(idCardBox)
+        welcomeViewModel.listCheckBox.add(fingerprintsBox)
+        welcomeViewModel.listCheckBox.add(icBox)
+
+    }
+
+    private fun setView() {
+        rightTv.text = getString(R.string.setting_text)
+        rightTv.visibility = View.VISIBLE
+        rightTv.setOnClickListener {
+            readyGo(SettingActivity::class.java)
+        }
     }
 
     /**
@@ -48,7 +66,7 @@ class WelcomeActivity : BaseActivity() {
      */
     private fun storageHint() {
         val type = StorageUtils.readSDCard(this, true)
-        LogUtils.d(TAG, "storageHint$type")
+        LogUtils.d(TAG, "storageHint$type", 0, 0)
         if (type == 1) {
             showDialog(getTextString(type))
         }
@@ -119,21 +137,37 @@ class WelcomeActivity : BaseActivity() {
             setEnabled()
         }
         startTv.setOnClickListener {
-
-            MainActivity.startIntent(this, getIsCheckCode() as ArrayList<Int>, number)
+            UPLOADING_TIME = System.currentTimeMillis()
+            MainActivity.startIntent(this, getIsCheckCode() as ArrayList<Int>, number, mTestWork)
         }
         addTextListener()
+        addTestWorkListener()
 
-        TestBtn.setOnClickListener {
+    }
 
+    private fun addTestWorkListener() {
+        testCodeEdt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && !TextUtils.isEmpty(s.toString())) {
+                    mTestWork = s.toString()
+                    startTv.isEnabled = number in 100..1000000 && allIsCheck
+                } else {
+                    startTv.isEnabled = false
+                }
+            }
 
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
     private fun addTextListener() {
         numberEdt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (s != null && !TextUtils.isEmpty(s.toString())) {
+                if (s != null && !TextUtils.isEmpty(s.toString()) && !TextUtils.isEmpty(mTestWork)) {
                     number = s.toString().toInt()
                     startTv.isEnabled = number in 100..1000000 && allIsCheck
                 } else {
@@ -202,17 +236,10 @@ class WelcomeActivity : BaseActivity() {
         }
     }
 
-
-    private fun initView() {
-        welcomeViewModel.listCheckBox.add(mainCameraBox)
-        welcomeViewModel.listCheckBox.add(binocularColorBox)
-        welcomeViewModel.listCheckBox.add(binocularBlackBox)
-        welcomeViewModel.listCheckBox.add(qrCodeBox)
-        welcomeViewModel.listCheckBox.add(idCardBox)
-        welcomeViewModel.listCheckBox.add(fingerprintsBox)
-        welcomeViewModel.listCheckBox.add(icBox)
-
-
+    override fun initView() {
+        setView()
+        onClickListener()
+        storageHint()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -227,6 +254,7 @@ class WelcomeActivity : BaseActivity() {
         Process.killProcess(Process.myPid())
         exitProcess(1)
     }
+
     private fun getPermission() {
         XXPermissions.with(this).permission(
             Permission.READ_EXTERNAL_STORAGE,
@@ -234,6 +262,7 @@ class WelcomeActivity : BaseActivity() {
         ) //不指定权限则自动获取清单中的危险权限
             .request(object : OnPermission {
                 override fun hasPermission(granted: List<String>, isAll: Boolean) {
+                    WiFi.openWiFi(this@WelcomeActivity)
 
                 }
 
@@ -242,8 +271,6 @@ class WelcomeActivity : BaseActivity() {
                 }
             })
     }
-
-
 
 
 }

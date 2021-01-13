@@ -30,6 +30,66 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/dp_40">
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/item_bag_selector">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/test_work_number"
+                    android:textColor="@color/color_222222"
+                    android:textSize="34sp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/testCodeEdt"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="@null"
+                    android:hint="@string/test_work_number_hint"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:minHeight="@dimen/dp_80"
+                    android:textSize="34sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/item_bag_selector">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/cycle_index"
+                    android:textColor="@color/color_222222"
+                    android:textSize="34sp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/numberEdt"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="@null"
+                    android:hint="@string/cycle_index_number"
+                    android:inputType="number"
+                    android:maxLength="7"
+                    android:minHeight="@dimen/dp_80"
+                    android:textSize="34sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/allBox"
                 style="@style/CheckStyle"
@@ -95,35 +155,6 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="@dimen/dp_40"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/item_bag_selector">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="26dp"
-                    android:text="@string/cycle_index"
-                    android:textColor="@color/color_222222"
-                    android:textSize="34sp" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/numberEdt"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:background="@null"
-                    android:hint="@string/cycle_index_number"
-                    android:inputType="number"
-                    android:maxLength="7"
-                    android:minHeight="@dimen/dp_80"
-                    android:textSize="34sp" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <TextView
                 android:id="@+id/startTv"

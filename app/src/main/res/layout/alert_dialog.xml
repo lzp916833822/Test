@@ -25,6 +25,7 @@
         android:id="@+id/downloadingTv"
         android:layout_width="@dimen/dp_150"
         android:layout_height="@dimen/dp_150"
+        android:background="@drawable/downloading_bag_shape"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_36"
@@ -38,6 +39,7 @@
         android:layout_marginTop="@dimen/dp_20"
         android:contentDescription="@string/app_name"
         android:scaleType="center"
+        android:src="@mipmap/sf_error_ic"
         android:visibility="gone" />
 
     <TextView

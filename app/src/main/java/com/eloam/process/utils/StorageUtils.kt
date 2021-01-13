@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.StatFs
 import android.os.storage.StorageManager
 import android.text.TextUtils
+import com.eloam.process.ui.WelcomeActivity
 import java.lang.reflect.Array
 import java.lang.reflect.InvocationTargetException
 
@@ -32,7 +33,7 @@ object StorageUtils {
             for (i in 0 until length) {
                 val storageVolumeElement = Array.get(result, i)
                 val path = getPath.invoke(storageVolumeElement) as String
-                LogUtils.d("StorageUtils",path)
+                LogUtils.d("StorageUtils",path, WelcomeActivity.UPLOADING_TIME,1)
                 val removable =
                     isRemovable.invoke(storageVolumeElement) as Boolean
                 if (is_removale == removable) {
@@ -76,7 +77,8 @@ object StorageUtils {
                 blockCount = sf.blockCount.toLong()
                 availCount = sf.availableBlocks.toLong()
             }
-            LogUtils.d("readSDCard", "${availCount * blockSize}===${blockSize * blockCount} ==${availCount * blockSize * 100 / (blockSize * blockCount)}")
+            LogUtils.d("readSDCard", "${availCount * blockSize}===${blockSize * blockCount} ==${availCount * blockSize * 100 / (blockSize * blockCount)}",
+                0,0)
             return if (availCount * blockSize * 100 / (blockSize * blockCount) < 20) 1 else 0
         }
         return -2

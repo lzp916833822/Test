@@ -45,6 +45,7 @@
     <dimen name="text_size_xmedium">18sp</dimen>
     <dimen name="text_size_50">50sp</dimen>
     <dimen name="text_size_40">40sp</dimen>
+    <dimen name="dp_44">44dp</dimen>
 
     <dimen name="chatting_item_time_divider_height">8dp</dimen>
     <dimen name="chatting_item_avatar_width">40dp</dimen>

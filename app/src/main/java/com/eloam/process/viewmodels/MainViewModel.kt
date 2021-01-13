@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.hardware.usb.UsbManager
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -15,14 +16,19 @@ import com.eloam.process.R
 import com.eloam.process.callBack.IcCardCallBack
 import com.eloam.process.callBack.IcCardReadCallBack
 import com.eloam.process.data.DataRepository
-import com.eloam.process.data.entity.StatueAnim
-import com.eloam.process.data.entity.StatueOpen
-import com.eloam.process.data.entity.StatueOpenDevice
-import com.eloam.process.data.entity.StatueResult
+import com.eloam.process.data.entity.*
+import com.eloam.process.ui.WelcomeActivity
 import com.eloam.process.usbutils.USBHelper
+import com.eloam.process.utils.GoSonUtils
 import com.eloam.process.utils.IcCardUtils
+import com.eloam.process.utils.JUtils
 import com.eloam.process.utils.LogUtils
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.lico.core.base.BaseViewModel
+import java.io.File
+import java.util.*
 
 /**
  * @author: lico
@@ -38,6 +44,7 @@ class MainViewModel(
     companion object {
         const val ACTION_USB_PERMISSION = "com.eloam.process.USB_PERMISSION"
         const val TAG = "MainViewModel"
+        const val DEVICE_INFO = "DeviceInfo"
     }
 
     var mIcCardUtils: IcCardUtils? = null
@@ -57,6 +64,58 @@ class MainViewModel(
     //执行的结果
     var statueResult: MutableLiveData<StatueResult> = MutableLiveData()
 
+    //上传结果
+    var uploadingFileResult: MutableLiveData<Int> = MutableLiveData()
+
+    private val mDeviceInfo: MutableMap<String, String> = HashMap() // 用来存储设备信息和异常信息
+
+    /**
+     * 收集设备参数信息
+     *
+     * @param context
+     */
+    private fun collectDeviceInfo(context: Context?) {
+        try {
+            val pm = context!!.packageManager // 获得包管理器
+            val pi = pm.getPackageInfo(
+                context.packageName,
+                PackageManager.GET_ACTIVITIES
+            ) // 得到该应用的信息，即主Activity
+            if (pi != null) {
+                val versionName =
+                    if (pi.versionName == null) "null" else pi.versionName
+                val versionCode = pi.versionCode.toString() + ""
+                mDeviceInfo["versionName"] = versionName
+                mDeviceInfo["versionCode"] = versionCode
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        val fields =
+            Build::class.java.declaredFields // 反射机制
+        for (field in fields) {
+            try {
+                field.isAccessible = true
+                mDeviceInfo[field.name] = field[""].toString()
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+            } catch (e: IllegalAccessException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    /**
+     * 获取设备信息
+     */
+    fun getDeviceInfo(): String {
+        collectDeviceInfo(context)
+        val sb = StringBuilder()
+        for ((key, value) in mDeviceInfo) {
+            sb.append(key).append("=").append(value).append("\r\n")
+        }
+        return sb.toString()
+    }
 
     @SuppressLint("NewApi")
     fun initIdCardUsbDev() {
@@ -98,12 +157,18 @@ class MainViewModel(
                     if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                         statueOpen.postValue(StatueOpen(4, 0))
 
-                        LogUtils.e(TAG, "USB is card get permission success")
+                        LogUtils.e(
+                            TAG, "USB is card get permission success",
+                            WelcomeActivity.UPLOADING_TIME, 1
+                        )
                         //USB授权成功
                     } else {
                         statueOpen.postValue(StatueOpen(4, -1))
 
-                        LogUtils.e(TAG, "USB is card get permission failure")
+                        LogUtils.e(
+                            TAG, "USB is card get permission failure",
+                            WelcomeActivity.UPLOADING_TIME, 1
+                        )
                     }
                 }
             }
@@ -210,5 +275,49 @@ class MainViewModel(
 
     fun onDestroyIcCard() {
         mIcCardUtils?.onDestroy()
+    }
+
+    fun uploadTestFiles(myLogInfo: MyLogInfo) {
+        val filePath = myLogInfo.filePath
+        val file = File(filePath)
+        if (file.exists()) {
+            val body: RequestBody = requestBody(myLogInfo, file, requestBody(file))
+
+            launchOnlyresult({
+                dataRepository.uploadTestFiles(body)!!
+            }, {
+                uploadingFileResult.postValue(0)
+                JUtils.onToastLong(R.string.upload_successful)
+
+            }, {
+                uploadingFileResult.postValue(1)
+                JUtils.onToastLong(it.message)
+
+            }, {}, true)
+        }
+
+
+    }
+
+    private fun requestBody(
+        myLogInfo: MyLogInfo,
+        file: File,
+        fileRQ: RequestBody
+    ): RequestBody {
+        LogUtils.i(TAG, GoSonUtils.toJson(myLogInfo), 0, 0)
+        return MultipartBody.Builder().apply {
+            addFormDataPart("mac", myLogInfo.mac)
+            addFormDataPart("sn", myLogInfo.sn)
+            addFormDataPart("reportTime", myLogInfo.reportTime.toString())
+            addFormDataPart("employeeNo", myLogInfo.employeeNo)
+            addFormDataPart("itemName", myLogInfo.itemName)
+            addFormDataPart("terminalInfo", myLogInfo.terminalInfo)
+            addFormDataPart("file", file.name, fileRQ)
+        }.build()//可以任意调用该对象的任意方法，并返回该对象
+
+    }
+
+    private fun requestBody(file: File): RequestBody {
+        return RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
     }
 }
