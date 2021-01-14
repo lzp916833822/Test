@@ -291,9 +291,11 @@ class MainViewModel(
 
             }, {
                 uploadingFileResult.postValue(1)
-                JUtils.onToastLong(it.message)
+                JUtils.onToastLong(R.string.fail_to_upload)
 
             }, {}, true)
+        } else {
+            JUtils.onToastLong(R.string.file_no_exists)
         }
 
 

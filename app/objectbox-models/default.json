@@ -121,7 +121,7 @@
     },
     {
       "id": "3:5849295610094142220",
-      "lastPropertyId": "8:5030706936472432572",
+      "lastPropertyId": "9:5765003343534677522",
       "name": "MyLogInfo",
       "properties": [
         {
@@ -165,6 +165,12 @@
           "id": "8:5030706936472432572",
           "name": "filePath",
           "type": 9
+        },
+        {
+          "id": "9:5765003343534677522",
+          "name": "isCheck",
+          "type": 1,
+          "flags": 4
         }
       ],
       "relations": []

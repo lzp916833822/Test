@@ -32,6 +32,7 @@ task clean(type: Delete) {
 }
 
 ext {
+    pagingVersion = '3.0.0-alpha03'
     myBuildToolsVersion = "28.0.3"
     myMinSdkVersion = 21
     myTargetSdkVersion = 28

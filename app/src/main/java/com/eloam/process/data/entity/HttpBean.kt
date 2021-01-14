@@ -18,7 +18,8 @@ data class MyLogInfo(
     var employeeNo: String,
     var itemName: String,
     var terminalInfo: String,
-    var filePath: String
+    var filePath: String,
+    var isCheck: Boolean = true
 )
 
 data class PostData(

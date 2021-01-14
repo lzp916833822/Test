@@ -65,6 +65,10 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.7.471'
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版
 
+
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+    implementation "androidx.paging:paging-rxjava2-ktx:$pagingVersion"
+
     implementation 'com.airbnb.android:lottie:3.4.2'
 
     //Base

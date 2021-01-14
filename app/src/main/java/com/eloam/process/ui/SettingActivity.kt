@@ -27,9 +27,11 @@ class SettingActivity : BaseActivity() {
             finish()
         }
         viewRecordsLayout.setOnClickListener {
+            readyGo(ViewWorkLogActivity::class.java)
 
         }
         uploadingLayout.setOnClickListener {
+            readyGo(UploadFileActivity::class.java)
 
         }
 

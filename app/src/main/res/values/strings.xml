@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">老化程序</string>
     <!--welcome-->
     <string name="aging_process">安卓老化测试程序</string>
@@ -33,20 +33,29 @@
     <string name="for_number">(设置循环次数：</string>
     <string name="cur_number">；当前循环次数：</string>
     <string name="stop_for">请先停止当前操作</string>
-    <string name="please_insert_sd_hint" translatable="false">请插入SD Card</string>
-    <string name="SD_Card_has_reached_hint" translatable="false">内存已达到80%，请及时导出</string>
+    <string name="please_insert_sd_hint">请插入SD Card</string>
+    <string name="SD_Card_has_reached_hint">内存已达到80%，请及时导出</string>
     <!--setting-->
     <string name="view_test_records">查看测试记录</string>
     <string name="uploading_test_records">上传测试记录</string>
+    <!--upload file-->
+    <string name="upload_text">上传</string>
+    <string name="test_work">测试工号</string>
+    <string name="log_name">日志名称</string>
+    <string name="operate">操作</string>
+    <string name="views_text">查看</string>
+    <string name="no_data">暂无数据</string>
+    <string name="file_no_exists">文件不存在</string>
+    <string name="fail_to_upload">上传失败 </string>
 
     <!--提示-->
     <string name="cancel" translatable="false">取消</string>
     <string name="enter" translatable="false">确认</string>
     <string name="url" translatable="false">URL</string>
     <string name="look" translatable="false">查看</string>
-    <string name="whether_to_restore_factory_configuration" translatable="false">是否要恢复出厂配置？</string>
-    <string name="loading_waite">记录上传中,请等待… </string>>
-    <string name="upload_successful">上传成功 </string>>
+    <string name="whether_to_restore_factory_configuration">是否要恢复出厂配置？</string>
+    <string name="loading_waite">记录上传中,请等待… </string>
+    <string name="upload_successful">上传成功 </string>
 
 
 </resources>

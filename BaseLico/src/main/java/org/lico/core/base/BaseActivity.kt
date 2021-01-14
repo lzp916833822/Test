@@ -8,7 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * @author: lico
+ * @author: lzp
  * @Desc:
  */
 abstract class BaseActivity : AppCompatActivity() {

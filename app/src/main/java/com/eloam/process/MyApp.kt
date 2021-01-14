@@ -9,6 +9,7 @@ import com.eloam.process.utils.YuvUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.logger.AndroidLogger
 import org.koin.core.context.startKoin
+import org.koin.dsl.koinApplication
 
 /**
  * @author: lzp
@@ -44,7 +45,7 @@ class MyApp : Application() {
         startKoin {
             AndroidLogger()
             androidContext(this@MyApp)
-            //   koinApplication { this@MyApp }
+            koinApplication { this@MyApp }
             modules(appModule)
         }
         YuvUtils.init(this)

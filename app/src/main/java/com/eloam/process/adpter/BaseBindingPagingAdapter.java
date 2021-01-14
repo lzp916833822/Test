@@ -9,16 +9,25 @@ import androidx.annotation.LayoutRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ViewDataBinding;
+import androidx.paging.PagingDataAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.eloam.process.data.entity.DataInfo;
 
-public abstract class BaseBindingAdapter<M, B extends ViewDataBinding> extends RecyclerView.Adapter {
+import org.jetbrains.annotations.NotNull;
+
+import static androidx.recyclerview.widget.RecyclerView.ViewHolder;
+
+
+public abstract class BaseBindingPagingAdapter<M, B extends ViewDataBinding> extends PagingDataAdapter<DataInfo,RecyclerView.ViewHolder>{
     protected Context context;
     protected ObservableArrayList<M> items;
     protected ListChangedCallback itemsChangeCallback;
 
 
-    public BaseBindingAdapter(Context context) {
+    public BaseBindingPagingAdapter(Context context,@NotNull DiffUtil.ItemCallback<DataInfo> diffCallback) {
+        super(diffCallback);
         this.context = context;
         this.items = new ObservableArrayList<>();
         this.itemsChangeCallback = new ListChangedCallback();
@@ -28,7 +37,7 @@ public abstract class BaseBindingAdapter<M, B extends ViewDataBinding> extends R
         return items;
     }
 
-    public class BaseBindingViewHolder extends RecyclerView.ViewHolder {
+    public class BaseBindingViewHolder extends ViewHolder {
         public BaseBindingViewHolder(View itemView) {
             super(itemView);
         }
@@ -40,13 +49,13 @@ public abstract class BaseBindingAdapter<M, B extends ViewDataBinding> extends R
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         B binding = DataBindingUtil.inflate(LayoutInflater.from(this.context), this.getLayoutResId(viewType), parent, false);
         return new BaseBindingViewHolder(binding.getRoot());
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         B binding = DataBindingUtil.getBinding(holder.itemView);
         this.onBindItem(binding, this.items.get(position), position);
     }
@@ -101,27 +110,27 @@ public abstract class BaseBindingAdapter<M, B extends ViewDataBinding> extends R
     private class ListChangedCallback extends ObservableArrayList.OnListChangedCallback<ObservableArrayList<M>> {
         @Override
         public void onChanged(ObservableArrayList<M> newItems) {
-            BaseBindingAdapter.this.onChanged(newItems);
+            BaseBindingPagingAdapter.this.onChanged(newItems);
         }
 
         @Override
         public void onItemRangeChanged(ObservableArrayList<M> newItems, int i, int i1) {
-            BaseBindingAdapter.this.onItemRangeChanged(newItems, i, i1);
+            BaseBindingPagingAdapter.this.onItemRangeChanged(newItems, i, i1);
         }
 
         @Override
         public void onItemRangeInserted(ObservableArrayList<M> newItems, int i, int i1) {
-            BaseBindingAdapter.this.onItemRangeInserted(newItems, i, i1);
+            BaseBindingPagingAdapter.this.onItemRangeInserted(newItems, i, i1);
         }
 
         @Override
         public void onItemRangeMoved(ObservableArrayList<M> newItems, int i, int i1, int i2) {
-            BaseBindingAdapter.this.onItemRangeMoved(newItems);
+            BaseBindingPagingAdapter.this.onItemRangeMoved(newItems);
         }
 
         @Override
         public void onItemRangeRemoved(ObservableArrayList<M> sender, int positionStart, int itemCount) {
-            BaseBindingAdapter.this.onItemRangeRemoved(sender, positionStart, itemCount);
+            BaseBindingPagingAdapter.this.onItemRangeRemoved(sender, positionStart, itemCount);
         }
     }
 }
