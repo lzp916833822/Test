@@ -11,10 +11,10 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 11,
-      "versionName": "1.1.1",
+      "versionCode": 12,
+      "versionName": "1.1.2",
       "enabled": true,
-      "outputFile": "agingProcess_2020-12-18-17-15_1.1.1_release.apk"
+      "outputFile": "agingProcess_2021-01-15-15-59_1.1.2_release.apk"
     }
   ]
 }

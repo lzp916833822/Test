@@ -11,7 +11,9 @@ import com.eloam.process.adpter.UploadFileInfoAdapter
 import com.eloam.process.data.ObjectBox
 import com.eloam.process.data.entity.MyLogInfo
 import com.eloam.process.dialog.SweetAlertDialog
+import com.eloam.process.utils.JUtils
 import com.eloam.process.utils.LogUtils
+import com.eloam.process.utils.NetUtils
 import com.eloam.process.viewmodels.UploadViewModel
 import com.serenegiant.utils.UIThreadHelper
 import io.objectbox.Box
@@ -24,6 +26,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.lico.core.base.BaseActivity
+import java.io.File
 
 class UploadFileActivity : BaseActivity() {
     companion object {
@@ -59,7 +62,9 @@ class UploadFileActivity : BaseActivity() {
         allData: MutableList<MyLogInfo>
     ) {
         runOnUiThread {
-            adapter.items.addAll(allData)
+            allData.forEach {
+                adapter.items.add(0, it)
+            }
             if (allData.isNullOrEmpty()) {
                 noDataIv.visibility = View.VISIBLE
                 noDataTv.visibility = View.VISIBLE
@@ -80,6 +85,11 @@ class UploadFileActivity : BaseActivity() {
         uploadViewModel.uploadingFileResult.observe(this, Observer {
             if (it.result == 0) {
                 val remove = adInfoBox.remove(it.id)
+                val file = File(it.filePath)
+                if (file.exists()) {
+                    val delete = file.delete()
+                    LogUtils.i(TAG, "delete=$delete ", 0, 0)
+                }
                 LogUtils.i(TAG, "remove=$remove  id=${it.id} index${it.index}", 0, 0)
             }
             uploadData()
@@ -111,8 +121,13 @@ class UploadFileActivity : BaseActivity() {
         backIv.setOnClickListener {
             finish()
         }
+
         rightTv.setOnClickListener {
-            uploadData()
+            if (NetUtils.isNetworkAvailable(this)) {
+                uploadData()
+            } else {
+                JUtils.onToastLong(R.string.net_error)
+            }
 
         }
 

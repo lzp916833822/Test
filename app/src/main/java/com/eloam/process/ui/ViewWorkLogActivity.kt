@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.eloam.process.R
 import com.eloam.process.adpter.LoaderBottomAdapter
 import com.eloam.process.adpter.ViewWorkLogAdapter
+import com.eloam.process.utils.NetUtils
 import com.eloam.process.viewmodels.ViewWorkLogViewModel
 import kotlinx.android.synthetic.main.activity_upload_file.*
 import kotlinx.android.synthetic.main.top_layout.*
@@ -68,6 +69,7 @@ class ViewWorkLogActivity : BaseActivity() {
         operateTv.text = getString(R.string.operate)
         operateTv.setTextColor(this.resources.getColor(R.color.black))
         backIv.setOnClickListener { finish() }
+        if (!NetUtils.isNetworkAvailable(this)) noDataTv.text = getString(R.string.net_error)
         noDataIv.setOnClickListener {
             mViewWorkLogAdapter.refresh()
         }

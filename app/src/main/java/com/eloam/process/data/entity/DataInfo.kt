@@ -23,6 +23,7 @@ data class StatueOpen(
 )
 
 data class UploadStatueResult(
+    var filePath: String,//文件路径
     var id: Long,//数据库id
     var index: Int,//数组坐标
     var result: Int//结果0成功，其它失败

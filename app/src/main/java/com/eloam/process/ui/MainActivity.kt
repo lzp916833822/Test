@@ -6,8 +6,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.hardware.usb.UsbDevice
 import android.os.Build
+import android.text.Editable
 import android.text.Html
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
@@ -163,6 +165,25 @@ class MainActivity : BaseActivity() {
         startTv.setOnClickListener {
             onStartTv()
         }
+        addTextChangedListener()
+    }
+
+    private fun addTextChangedListener() {
+        qr_code_edt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val toString = s.toString()
+                if (isOpenQrCode && !TextUtils.isEmpty(toString)) {
+                    setIsOpen(3, false)
+                    next()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
 
@@ -229,13 +250,13 @@ class MainActivity : BaseActivity() {
         if (isFlag) {
             startTv.text = getString(R.string.start)
             isFlag = false
-            mCurNumber = 0
             uploadingLogFile()
         } else {
             if (!isRunFinish) {
                 JUtils.onToastLong(getString(R.string.is_run_finish))
                 return
             }
+            mCurNumber = 0
             UPLOADING_TIME = System.currentTimeMillis()
             saveData()
             isFlag = true
@@ -458,7 +479,12 @@ class MainActivity : BaseActivity() {
                 .build().find()
         myLogInfo.forEach { it2 ->
             val remove = adInfoBox.remove(it2.id)
-            LogUtils.i(TAG, "remove=$remove id=${it2.id}", UPLOADING_TIME, 1)
+            val file = File(it2.filePath)
+            if (file.exists()) {
+                val delete = file.delete()
+                LogUtils.i(TAG, "delete=$delete ", 0, 0)
+            }
+            LogUtils.i(TAG, "remove=$remove id=${it2.id}", 0, 0)
 
         }
     }
@@ -856,6 +882,7 @@ class MainActivity : BaseActivity() {
     private fun openQrCode(it: StatueOpen) {
         when (it.state) {
             1 -> {
+                setIsOpen(3, true)
                 openQrCoed()
             }
             2 -> {

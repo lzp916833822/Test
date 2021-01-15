@@ -29,7 +29,7 @@ class UploadViewModel(
     //上传结果
     var uploadingFileResult: MutableLiveData<UploadStatueResult> = MutableLiveData()
 
-    fun  uploadTestFiles(myLogInfo: MyLogInfo, index: Int) {
+    fun uploadTestFiles(myLogInfo: MyLogInfo, index: Int) {
         val filePath = myLogInfo.filePath
         val file = File(filePath)
         if (file.exists()) {
@@ -37,15 +37,26 @@ class UploadViewModel(
             launchOnlyresult({
                 dataRepository.uploadTestFiles(body)
             }, {
-                uploadingFileResult.postValue(UploadStatueResult(myLogInfo.id,index,0))
+                postValue(myLogInfo, index, 0)
                 mRemoveId.add(index)
             }, {
-                uploadingFileResult.postValue(UploadStatueResult(myLogInfo.id,index,1))
+                postValue(myLogInfo, index, 1)
                 LogUtils.i(TAG, it.errMsg, 0, 0)
             }, {}, true)
         }
 
 
+    }
+
+    private fun postValue(myLogInfo: MyLogInfo, index: Int, result: Int) {
+        uploadingFileResult.postValue(
+            UploadStatueResult(
+                myLogInfo.filePath,
+                myLogInfo.id,
+                index,
+                result
+            )
+        )
     }
 
     private fun requestBody(

@@ -11,8 +11,8 @@ import okhttp3.RequestBody
 import org.lico.core.base.BaseModel
 
 /**
- * @author: lico
- * @create：2020/5/25
+ * @author: lzp
+ * @create：2020/12/25
  * @describe：
  */
 class DataRepository(private val apiService: ApiService) : BaseModel() {

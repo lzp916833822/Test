@@ -54,7 +54,7 @@
                     android:background="@null"
                     android:hint="@string/test_work_number_hint"
                     android:inputType="number"
-                    android:maxLength="4"
+                    android:maxLength="10"
                     android:minHeight="@dimen/dp_80"
                     android:textSize="34sp" />
 

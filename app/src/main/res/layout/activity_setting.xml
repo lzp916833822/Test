@@ -79,6 +79,6 @@
     <TextView
         style="@style/setting_line_style"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewRecordsLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadingLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

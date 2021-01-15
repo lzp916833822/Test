@@ -4,7 +4,6 @@
     android:id="@+id/topLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:minHeight="@dimen/dp_80">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -35,12 +34,17 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp_20"
-        android:textStyle="bold"
-        android:textColor="@color/color_e4"
         android:text="@string/setting_text"
+        android:textColor="@color/color_e4"
         android:textSize="@dimen/text_size_24"
+        android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/setting_line_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

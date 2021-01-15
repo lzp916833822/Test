@@ -20,10 +20,10 @@ interface ApiService {
 
         //上传测试日志
         const val UPLOADING_TEST_LOGS =
-            "http://172.16.200.98:8889//logs/reportTestLogsFromTerminal"
+            "https://pmp.eloam.net/api/logs/reportTestLogsFromTerminal"
 
         //查询测试日志参数
-        const val FIND_TERMINAL_TEST_LOG = "http://172.16.200.98:8889/logs/findTerminalTestLog"
+        const val FIND_TERMINAL_TEST_LOG = "https://pmp.eloam.net/api/logs/findTerminalTestLog"
 
     }
 

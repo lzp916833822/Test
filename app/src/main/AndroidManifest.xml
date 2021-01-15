@@ -8,11 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许写入数据到SD卡  -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 允许读取SD卡 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 允许写入数据到SD卡  -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许读取SD卡 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.usb.host" />
@@ -27,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/BaseTheme"
         tools:replace="android:allowBackup,android:icon,android:theme">
-        <activity android:name=".ui.ViewsLogWebViewActivity"/>
+        <activity android:name=".ui.ViewsLogWebViewActivity" />
         <activity android:name=".ui.ViewWorkLogActivity" />
         <activity android:name=".ui.UploadFileActivity" />
         <activity android:name=".ui.SettingActivity" />
