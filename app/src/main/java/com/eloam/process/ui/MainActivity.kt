@@ -229,6 +229,7 @@ class MainActivity : BaseActivity() {
         if (isFlag) {
             startTv.text = getString(R.string.start)
             isFlag = false
+            mCurNumber = 0
             uploadingLogFile()
         } else {
             if (!isRunFinish) {

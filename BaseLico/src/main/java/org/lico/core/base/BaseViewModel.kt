@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import org.lico.core.event.Message
 import org.lico.core.event.SingleLiveEvent
 import org.lico.core.network.ExceptionHandle
@@ -21,6 +23,11 @@ import retrofit2.Response
  */
 open class BaseViewModel(private val app: Application) : AndroidViewModel(app),
     LifecycleObserver {
+
+
+    fun getRequestBody(body: String): RequestBody {
+        return RequestBody.create("application/json; charset=utf-8".toMediaTypeOrNull(), body)
+    }
 
     val defUI: UIChange by lazy { UIChange() }
 
@@ -53,20 +60,20 @@ open class BaseViewModel(private val app: Application) : AndroidViewModel(app),
         },
         complete: suspend CoroutineScope.() -> Unit = {},
         isShowDialog: Boolean = true
-                ) {
+    ) {
         if (isShowDialog) defUI.showDialog.call()
         launchUI {
             handleException(
-                    withContext(Dispatchers.IO) { block },
-                    {
-                        Log.e("zzkong", "出错了呀呀呀呀呀呀呀:"+it.errMsg)
-                        error(it)
-                    },
-                    {
-                        defUI.dismissDialog.call()
-                        complete()
-                    }
-                           )
+                withContext(Dispatchers.IO) { block },
+                {
+                    Log.e("zzkong", "出错了呀呀呀呀呀呀呀:" + it.errMsg)
+                    error(it)
+                },
+                {
+                    defUI.dismissDialog.call()
+                    complete()
+                }
+            )
         }
     }
 
@@ -86,22 +93,22 @@ open class BaseViewModel(private val app: Application) : AndroidViewModel(app),
         },
         complete: () -> Unit = {},
         isShowDialog: Boolean = true
-                            ) {
+    ) {
         if (isShowDialog) defUI.showDialog.call()
         launchUI {
             handleException(
-                    { withContext(Dispatchers.IO) { block() } },
-                    { res ->
-                        executeResponse(res) { success(it) }
-                    },
-                    {
-                        error(it)
-                    },
-                    {
-                        defUI.dismissDialog.call()
-                        complete()
-                    }
-                           )
+                { withContext(Dispatchers.IO) { block() } },
+                { res ->
+                    executeResponse(res) { success(it) }
+                },
+                {
+                    error(it)
+                },
+                {
+                    defUI.dismissDialog.call()
+                    complete()
+                }
+            )
         }
     }
 
@@ -111,7 +118,7 @@ open class BaseViewModel(private val app: Application) : AndroidViewModel(app),
     private suspend fun <T> executeResponse(
         response: Response<T>,
         success: suspend CoroutineScope.(T) -> Unit
-                                           ) {
+    ) {
         coroutineScope {
             if (response.isSuccessful) success(response.body()!!)
             else throw ResponseThrowable(response.code()!!, response.message())
@@ -128,7 +135,7 @@ open class BaseViewModel(private val app: Application) : AndroidViewModel(app),
         success: suspend CoroutineScope.(Response<T>) -> Unit,
         error: suspend CoroutineScope.(ResponseThrowable) -> Unit,
         complete: suspend CoroutineScope.() -> Unit
-                                           ) {
+    ) {
         coroutineScope {
             try {
                 success(block())
@@ -148,7 +155,7 @@ open class BaseViewModel(private val app: Application) : AndroidViewModel(app),
         block: suspend CoroutineScope.() -> Unit,
         error: suspend CoroutineScope.(ResponseThrowable) -> Unit,
         complete: suspend CoroutineScope.() -> Unit
-                                       ) {
+    ) {
         coroutineScope {
             try {
                 block()

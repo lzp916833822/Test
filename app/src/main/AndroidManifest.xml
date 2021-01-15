@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/BaseTheme"
         tools:replace="android:allowBackup,android:icon,android:theme">
-        <activity android:name=".ui.ViewsLogWebViewActivity"></activity>
+        <activity android:name=".ui.ViewsLogWebViewActivity"/>
         <activity android:name=".ui.ViewWorkLogActivity" />
         <activity android:name=".ui.UploadFileActivity" />
         <activity android:name=".ui.SettingActivity" />

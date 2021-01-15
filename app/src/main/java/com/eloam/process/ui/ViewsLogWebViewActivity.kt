@@ -1,5 +1,6 @@
 package com.eloam.process.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.webkit.WebChromeClient
@@ -44,6 +45,7 @@ class ViewsLogWebViewActivity : BaseActivity() {
         setWebView()
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun setWebView() {
         val settings = webView.settings
         // 设置WebView支持JavaScript
@@ -64,7 +66,7 @@ class ViewsLogWebViewActivity : BaseActivity() {
                 .path //缓存数据的存储地址
         settings.setAppCachePath(appCacheDir)
         settings.setAppCacheEnabled(true) //开启缓存功能
-        settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK //缓存模式
+        settings.cacheMode = WebSettings.LOAD_DEFAULT //缓存模式
         settings.allowFileAccess = true
         settings.domStorageEnabled = true
         settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS

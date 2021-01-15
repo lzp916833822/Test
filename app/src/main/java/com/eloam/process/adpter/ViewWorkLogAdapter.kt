@@ -3,20 +3,21 @@ package com.eloam.process.adpter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.eloam.process.R
 import com.eloam.process.data.entity.DataInfo
-import com.eloam.process.databinding.UploadFileItemBinding
 import com.eloam.process.ui.ViewsLogWebViewActivity
 import com.eloam.process.utils.MyLocalLog
 import com.eloam.process.utils.MyLocalLog.myLogSdf
+import kotlinx.android.synthetic.main.upload_file_item.view.*
 
-class ViewWorkLogAdapter :
+class ViewWorkLogAdapter(private val onVisibility: () -> Unit) :
     PagingDataAdapter<DataInfo, RecyclerView.ViewHolder>(object : ItemCallback<DataInfo>() {
+
         override fun areItemsTheSame(oldItem: DataInfo, newItem: DataInfo): Boolean {
+
             return oldItem == newItem
         }
 
@@ -24,41 +25,42 @@ class ViewWorkLogAdapter :
             return oldItem == newItem
         }
     }) {
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val binding: UploadFileItemBinding? = DataBindingUtil.getBinding(holder.itemView)
-        getItem(position)?.let { (holder as WorkLogViewHolder).onShowView(it, binding) }
+        val holders = holder as WorkLogViewHolder
+        getItem(position)?.let { holders.onShowView(it, holders.itemView, onVisibility) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
         return WorkLogViewHolder.getView(parent)
     }
 
 
     class WorkLogViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         companion object {
+
             fun getView(parent: ViewGroup): WorkLogViewHolder {
-                val binding: UploadFileItemBinding = DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
-                    R.layout.upload_file_item,
-                    parent,
-                    false
+                return WorkLogViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.upload_file_item, parent, false)
                 )
-                return WorkLogViewHolder(binding.root)
 
             }
 
         }
 
 
-        fun onShowView(item: DataInfo, binding: UploadFileItemBinding?) {
+        fun onShowView(item: DataInfo, holder: View, onVisibility: () -> Unit) {
+            onVisibility()
             val logName = myLogSdf.format(item.reportTime) + MyLocalLog.MYLOGFILEName
-            binding?.checkBox?.visibility = View.GONE
-            binding?.testWorkTv?.text = item.employeeNo
-            binding?.logNameTv?.text = logName
-            binding?.operateTv?.setOnClickListener {
-                ViewsLogWebViewActivity.onStartActivity(binding.root.context,logName,item.baseUrl)
+            holder.checkBox.visibility = View.GONE
+            holder.testWorkTv.text = item.employeeNo
+            holder.logNameTv.text = logName
+            holder.operateTv.setOnClickListener {
+                ViewsLogWebViewActivity.onStartActivity(holder.context, logName, item.baseUrl)
             }
-
 
         }
 

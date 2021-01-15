@@ -56,6 +56,7 @@
     <string name="whether_to_restore_factory_configuration">是否要恢复出厂配置？</string>
     <string name="loading_waite">记录上传中,请等待… </string>
     <string name="upload_successful">上传成功 </string>
-
+    <string name="button_retry">重试</string>
+    <string name="label_error">出问题了，请再试一次</string>
 
 </resources>

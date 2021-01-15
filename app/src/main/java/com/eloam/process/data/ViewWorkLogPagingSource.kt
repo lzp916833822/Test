@@ -1,5 +1,6 @@
 package com.eloam.process.data
 
+import android.os.Build
 import androidx.paging.PagingSource
 import com.eloam.process.MyApp
 import com.eloam.process.data.DataRepository.Companion.DEFAULT_PAGE_INDEX
@@ -17,7 +18,7 @@ import java.io.IOException
  * provides the data source for paging lib from api calls
  */
 
-class ViewWorkLogPagingSource(val apiService: ApiService) :
+class ViewWorkLogPagingSource(private val apiService: ApiService) :
     PagingSource<Int, DataInfo>() {
 
     private fun getRequestBody(body: String): RequestBody {
@@ -28,15 +29,20 @@ class ViewWorkLogPagingSource(val apiService: ApiService) :
         //for first case it will be null, then we can pass some default value, in our case it's 1
         val page = params.key ?: DEFAULT_PAGE_INDEX
         val postRequestBody =
-            PostRequestBody(page, params.loadSize, "", Uuid.getUUID(MyApp.getApplication())!!)
+            PostRequestBody(
+                page,
+                params.loadSize,
+                Build.SERIAL,
+                Uuid.getUUID(MyApp.getApplication())!!
+            )
         val toJson = GoSonUtils.toJson(postRequestBody)
         return try {
             val response = apiService.findReportTerminalLog(getRequestBody(toJson))
-            val list = response.body()!!.data.list
+            val list = response.body()?.data?.list
             LoadResult.Page(
-                list,
+                list!!,
                 if (page == DEFAULT_PAGE_INDEX) null else page - 1,
-                if (list.isEmpty()) null else page + 1
+                if (list.isNullOrEmpty()) null else page + 1
             )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
