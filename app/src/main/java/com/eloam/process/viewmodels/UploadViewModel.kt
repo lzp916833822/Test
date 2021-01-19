@@ -5,8 +5,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.eloam.process.data.DataRepository
 import com.eloam.process.data.entity.MyLogInfo
-import com.eloam.process.data.entity.UploadStatueResult
-import com.eloam.process.utils.GoSonUtils
 import com.eloam.process.utils.LogUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -24,10 +22,12 @@ class UploadViewModel(
         const val TAG = "UploadViewModel"
     }
 
-    var mRemoveId = mutableListOf<Int>()
+    var mPosition = 0//网络请求执行位置
+
+    var mRemoveData = mutableListOf<MyLogInfo>()
 
     //上传结果
-    var uploadingFileResult: MutableLiveData<UploadStatueResult> = MutableLiveData()
+    var uploadingFileResult: MutableLiveData<Int> = MutableLiveData()
 
     fun uploadTestFiles(myLogInfo: MyLogInfo, index: Int) {
         val filePath = myLogInfo.filePath
@@ -37,10 +37,12 @@ class UploadViewModel(
             launchOnlyresult({
                 dataRepository.uploadTestFiles(body)
             }, {
-                postValue(myLogInfo, index, 0)
-                mRemoveId.add(index)
+                mPosition++
+                mRemoveData.add(0, myLogInfo)
+                uploadingFileResult.postValue(index)
             }, {
-                postValue(myLogInfo, index, 1)
+                mPosition++
+                uploadingFileResult.postValue(index)
                 LogUtils.i(TAG, it.errMsg, 0, 0)
             }, {}, true)
         }
@@ -48,23 +50,12 @@ class UploadViewModel(
 
     }
 
-    private fun postValue(myLogInfo: MyLogInfo, index: Int, result: Int) {
-        uploadingFileResult.postValue(
-            UploadStatueResult(
-                myLogInfo.filePath,
-                myLogInfo.id,
-                index,
-                result
-            )
-        )
-    }
 
     private fun requestBody(
         myLogInfo: MyLogInfo,
         file: File,
         fileRQ: RequestBody
     ): RequestBody {
-        LogUtils.i(MainViewModel.TAG, GoSonUtils.toJson(myLogInfo), 0, 0)
         return MultipartBody.Builder().apply {
             addFormDataPart("mac", myLogInfo.mac)
             addFormDataPart("sn", myLogInfo.sn)

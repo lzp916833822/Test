@@ -47,7 +47,6 @@ import kotlinx.android.synthetic.main.top_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.lico.core.base.BaseActivity
 import java.io.File
@@ -261,7 +260,6 @@ class MainActivity : BaseActivity() {
                 return
             }
             mCurNumber = 0
-            UPLOADING_TIME = System.currentTimeMillis()
             saveData()
             isFlag = true
             clearCurNumber()
@@ -462,16 +460,20 @@ class MainActivity : BaseActivity() {
         mainViewModel.uploadingFileResult.observe(this, androidx.lifecycle.Observer {
             when (it) {
                 0 -> {
-                    mSweetAlertDialog?.dismiss()
-                    startTv.isEnabled = true
                     deleteData()
+                    dismiss()
                 }
                 1 -> {
-                    mSweetAlertDialog?.dismiss()
-                    startTv.isEnabled = true
+                    dismiss()
                 }
             }
         })
+    }
+
+    private fun dismiss() {
+        mSweetAlertDialog?.dismiss()
+        startTv.isEnabled = true
+        UPLOADING_TIME = System.currentTimeMillis()
     }
 
     /**

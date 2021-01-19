@@ -13,7 +13,6 @@ import com.eloam.process.utils.Uuid
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
-import retrofit2.HttpException
 import java.io.IOException
 
 /**
@@ -51,7 +50,7 @@ class ViewWorkLogPagingSource(private val apiService: ApiService) :
         } catch (exception: IOException) {
             EventBus.getDefault().post(PushBean().setPushData("finish"))
             return LoadResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             EventBus.getDefault().post(PushBean().setPushData("finish"))
             return LoadResult.Error(exception)
         }

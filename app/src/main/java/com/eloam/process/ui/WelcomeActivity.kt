@@ -39,7 +39,7 @@ class WelcomeActivity : BaseActivity() {
 
     override fun layoutId() = R.layout.activity_welcome
     private val welcomeViewModel: WelcomeViewModel by viewModel()
-    private var allIsCheck = false
+    private var mCheckNumber = 0
     private var number = 0
     private var mTestWork = ""
     override fun initData() {
@@ -94,47 +94,36 @@ class WelcomeActivity : BaseActivity() {
         }
         allBox.setOnClickListener {
             isCheck(allBox.isChecked)
+            mCheckNumber = if (allBox.isChecked) 7 else 0
             setEnabled()
         }
 
         mainCameraBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(mainCameraBox.isChecked)
         }
 
         binocularColorBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(binocularColorBox.isChecked)
         }
 
         binocularBlackBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(binocularBlackBox.isChecked)
         }
 
         qrCodeBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(qrCodeBox.isChecked)
         }
 
         idCardBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(idCardBox.isChecked)
         }
 
         fingerprintsBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(fingerprintsBox.isChecked)
         }
 
         icBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
-        }
-
-        icBox.setOnClickListener {
-            allBox.isChecked = getIsCheck()
-            setEnabled()
+            setEnable(icBox.isChecked)
         }
         startTv.setOnClickListener {
             UPLOADING_TIME = System.currentTimeMillis()
@@ -145,12 +134,18 @@ class WelcomeActivity : BaseActivity() {
 
     }
 
+    private fun setEnable(boolean: Boolean) {
+        getAllIsCheck(boolean)
+        setEnabled()
+        allBox.isChecked = getIsCheck()
+    }
+
     private fun addTestWorkListener() {
         testCodeEdt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s != null && !TextUtils.isEmpty(s.toString())) {
                     mTestWork = s.toString()
-                    startTv.isEnabled = number in 100..MAX_LENGTH && allIsCheck
+                    startTv.isEnabled = number in 100..MAX_LENGTH && mCheckNumber > 0
                 } else {
                     startTv.isEnabled = false
                 }
@@ -167,9 +162,12 @@ class WelcomeActivity : BaseActivity() {
     private fun addTextListener() {
         numberEdt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (s != null && !TextUtils.isEmpty(s.toString()) && !TextUtils.isEmpty(mTestWork)) {
+                if (s != null && !TextUtils.isEmpty(s.toString())) {
                     number = s.toString().toInt()
-                    startTv.isEnabled = number in 100..MAX_LENGTH && allIsCheck
+                    startTv.isEnabled =
+                        number in 100..MAX_LENGTH && mCheckNumber > 0 && !TextUtils.isEmpty(
+                            mTestWork
+                        )
                 } else {
                     startTv.isEnabled = false
                 }
@@ -188,8 +186,8 @@ class WelcomeActivity : BaseActivity() {
      * 设置开启按钮是否可以点击
      */
     private fun setEnabled() {
-        allIsCheck = getAllIsCheck()
-        startTv.isEnabled = number in 100..MAX_LENGTH && allIsCheck && !TextUtils.isEmpty(mTestWork)
+        startTv.isEnabled =
+            number in 100..MAX_LENGTH && mCheckNumber > 0 && !TextUtils.isEmpty(mTestWork)
     }
 
     /**
@@ -209,28 +207,19 @@ class WelcomeActivity : BaseActivity() {
      * 获取是否没有选中
      */
     private fun getIsCheck(): Boolean {
-
-        for (box in welcomeViewModel.listCheckBox) {
-            if (!box.isChecked)
-                return box.isChecked
-        }
-        return true
+        LogUtils.i(TAG, "$mCheckNumber", 0, 0)
+        return mCheckNumber == 7
     }
 
     /**
      * 获取是否有选中
      */
-    private fun getAllIsCheck(): Boolean {
-
-        for (box in welcomeViewModel.listCheckBox) {
-            if (box.isChecked)
-                return box.isChecked
-        }
-        return false
+    private fun getAllIsCheck(boolean: Boolean) {
+        LogUtils.d(TAG, "old=$mCheckNumber", 0, 0)
+        if (boolean) mCheckNumber++ else mCheckNumber--
     }
 
     private fun isCheck(isBox: Boolean) {
-
         for (box in welcomeViewModel.listCheckBox) {
             box.isChecked = isBox
         }

@@ -19,7 +19,6 @@ import com.eloam.process.data.DataRepository
 import com.eloam.process.data.entity.*
 import com.eloam.process.ui.WelcomeActivity
 import com.eloam.process.usbutils.USBHelper
-import com.eloam.process.utils.GoSonUtils
 import com.eloam.process.utils.IcCardUtils
 import com.eloam.process.utils.JUtils
 import com.eloam.process.utils.LogUtils
@@ -253,7 +252,7 @@ class MainViewModel(
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
             if (USBHelper.ACTION_USB_PERMISSION == action) {
-                // 到此你的android设备已经连上zigbee设备
+                // 到此你的android设备已经连上设备
                 statueOpen.postValue(StatueOpen(3, 0))
             } else {
                 statueOpen.postValue(StatueOpen(3, -1))
@@ -284,7 +283,7 @@ class MainViewModel(
             val body: RequestBody = requestBody(myLogInfo, file, requestBody(file))
 
             launchOnlyresult({
-                dataRepository.uploadTestFiles(body)!!
+                dataRepository.uploadTestFiles(body)
             }, {
                 uploadingFileResult.postValue(0)
                 JUtils.onToastLong(R.string.upload_successful)
@@ -306,7 +305,6 @@ class MainViewModel(
         file: File,
         fileRQ: RequestBody
     ): RequestBody {
-        LogUtils.i(TAG, GoSonUtils.toJson(myLogInfo), 0, 0)
         return MultipartBody.Builder().apply {
             addFormDataPart("mac", myLogInfo.mac)
             addFormDataPart("sn", myLogInfo.sn)

@@ -34,7 +34,7 @@ class UploadFileActivity : BaseActivity() {
     }
 
     private var mSweetAlertDialog: SweetAlertDialog? = null
-    private var mIndex = 0
+    private var mIndex = 0//总执行的数量
 
     private val uploadViewModel: UploadViewModel by viewModel()
     private var adInfoBox: Box<MyLogInfo> = ObjectBox.boxStore.boxFor()
@@ -65,13 +65,7 @@ class UploadFileActivity : BaseActivity() {
             allData.forEach {
                 adapter.items.add(0, it)
             }
-            if (allData.isNullOrEmpty()) {
-                noDataIv.visibility = View.VISIBLE
-                noDataTv.visibility = View.VISIBLE
-            } else {
-                noDataIv.visibility = View.GONE
-                noDataTv.visibility = View.GONE
-            }
+            isVisibility()
         }
     }
 
@@ -83,38 +77,48 @@ class UploadFileActivity : BaseActivity() {
 
     private fun onObserve() {
         uploadViewModel.uploadingFileResult.observe(this, Observer {
-            if (it.result == 0) {
-                val remove = adInfoBox.remove(it.id)
-                val file = File(it.filePath)
-                if (file.exists()) {
-                    val delete = file.delete()
-                    LogUtils.i(TAG, "delete=$delete ", 0, 0)
-                }
-                LogUtils.i(TAG, "remove=$remove  id=${it.id} index${it.index}", 0, 0)
-            }
-            uploadData()
-            removeAdapterData(it.index)
+            LogUtils.i(TAG, "it=$it ", 0, 0)
+            removeAdapterData()
         })
     }
 
     /**
      * 上传成功，移除Adapter数据
      */
-    private fun removeAdapterData(index: Int) {
-        LogUtils.i(TAG, "index=${index}  size=${mUploadFileInfoAdapter!!.items.size}", 0, 0)
-        if ((index + 1) > mUploadFileInfoAdapter!!.items.size) {
+    private fun removeAdapterData() {
+        if (mIndex == uploadViewModel.mPosition) {
+            mIndex = 0
+            uploadViewModel.mPosition = 0
             mSweetAlertDialog?.dismiss()
-            lifecycleScope.launch {
-                val all = adInfoBox.all
-                delay(200)
-                runOnUiThread {
-                    mIndex = 0
-                    checkBox.isChecked = true
-                    mUploadFileInfoAdapter!!.items.clear()
-                    onVisibility(mUploadFileInfoAdapter!!, all)
-                }
-            }
+            removeOrDeleteBoxData()
+            uploadViewModel.mRemoveData.clear()
+            isVisibility()
+        }
+    }
 
+    /**
+     * 上传成功删除数据库数据和移除列表数据和删除文件
+     */
+    private fun removeOrDeleteBoxData() {
+        uploadViewModel.mRemoveData.forEach {
+            val remove = adInfoBox.remove(it.id)
+            val removeAdapter = mUploadFileInfoAdapter!!.items.remove(it)
+            val file = File(it.filePath)
+            if (file.exists()) {
+                val delete = file.delete()
+                LogUtils.i(TAG, "delete=$delete ", 0, 0)
+            }
+            LogUtils.i(TAG, "remove=$remove  id=${it.id}removeAdapter=$removeAdapter ", 0, 0)
+        }
+    }
+
+    private fun isVisibility() {
+        if (mUploadFileInfoAdapter?.items.isNullOrEmpty()) {
+            noDataIv.visibility = View.VISIBLE
+            noDataTv.visibility = View.VISIBLE
+        } else {
+            noDataIv.visibility = View.GONE
+            noDataTv.visibility = View.GONE
         }
     }
 
@@ -147,17 +151,20 @@ class UploadFileActivity : BaseActivity() {
      * 遍历所有数据，需要上传的上传
      */
     private fun uploadData() {
-        if ((mIndex + 1) <= mUploadFileInfoAdapter!!.items.size) {
-            showDialog(SweetAlertDialog.NORMAL_TYPE, getString(R.string.loading_waite), "")
-            val myLogInfo = mUploadFileInfoAdapter!!.items[mIndex] as MyLogInfo
-            LogUtils.i(TAG, "isCheck=${myLogInfo.isCheck}  index=$mIndex", 0, 0)
-            mIndex++
+        mUploadFileInfoAdapter!!.items.forEachIndexed { index, info ->
+            val myLogInfo = info as MyLogInfo
             if (myLogInfo.isCheck) {
-                uploadViewModel.uploadTestFiles(myLogInfo, mIndex)
-            } else {
-                removeAdapterData(mIndex)
-                uploadData()
+                if (File(myLogInfo.filePath).exists()) {
+                    showDialog(SweetAlertDialog.NORMAL_TYPE, getString(R.string.loading_waite), "")
+                    mIndex++
+                    uploadViewModel.uploadTestFiles(myLogInfo, mIndex)
+                } else {
+                    uploadViewModel.mRemoveData.add(0, myLogInfo)
+                }
+
             }
+            LogUtils.i(TAG, "isCheck=${myLogInfo.isCheck}  mIndex=$mIndex index=$index", 0, 0)
+
         }
 
 
