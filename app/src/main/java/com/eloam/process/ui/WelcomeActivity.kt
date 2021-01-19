@@ -32,6 +32,7 @@ class WelcomeActivity : BaseActivity() {
     companion object {
         const val TAG = "WelcomeActivity"
         var UPLOADING_TIME: Long = System.currentTimeMillis()
+        private const val MAX_LENGTH = 100000
 
     }
 
@@ -74,7 +75,6 @@ class WelcomeActivity : BaseActivity() {
 
     private fun showDialog(hintText: String) {
         UIThreadHelper.runOnUiThread {
-
             val sd = SweetAlertDialog(mContext)
             sd.setView(SweetAlertDialog.MEMORY_HINT_TYPE, hintText)
             if (!sd.isShowing)
@@ -150,7 +150,7 @@ class WelcomeActivity : BaseActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (s != null && !TextUtils.isEmpty(s.toString())) {
                     mTestWork = s.toString()
-                    startTv.isEnabled = number in 100..1000000 && allIsCheck
+                    startTv.isEnabled = number in 100..MAX_LENGTH && allIsCheck
                 } else {
                     startTv.isEnabled = false
                 }
@@ -169,7 +169,7 @@ class WelcomeActivity : BaseActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (s != null && !TextUtils.isEmpty(s.toString()) && !TextUtils.isEmpty(mTestWork)) {
                     number = s.toString().toInt()
-                    startTv.isEnabled = number in 100..1000000 && allIsCheck
+                    startTv.isEnabled = number in 100..MAX_LENGTH && allIsCheck
                 } else {
                     startTv.isEnabled = false
                 }
@@ -189,7 +189,7 @@ class WelcomeActivity : BaseActivity() {
      */
     private fun setEnabled() {
         allIsCheck = getAllIsCheck()
-        startTv.isEnabled = number in 100..100000 && allIsCheck
+        startTv.isEnabled = number in 100..MAX_LENGTH && allIsCheck && !TextUtils.isEmpty(mTestWork)
     }
 
     /**
