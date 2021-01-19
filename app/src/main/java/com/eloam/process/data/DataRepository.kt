@@ -23,7 +23,7 @@ class DataRepository(private val apiService: ApiService) : BaseModel() {
     }
 
 
-    fun letViewWorkLogObservable(pagingConfig: PagingConfig = getDefaultPageConfig()): LiveData<PagingData<DataInfo>> {
+    fun letViewWorkLogObservable(pagingConfig: PagingConfig = getDefaultPageConfig()): LiveData<PagingData<DataInfo>>? {
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = { ViewWorkLogPagingSource(apiService) }

@@ -47,6 +47,7 @@ import kotlinx.android.synthetic.main.top_layout.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.lico.core.base.BaseActivity
 import java.io.File
@@ -122,6 +123,9 @@ class MainActivity : BaseActivity() {
         adInfoBox = ObjectBox.boxStore.boxFor()
 
     }
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initData() {

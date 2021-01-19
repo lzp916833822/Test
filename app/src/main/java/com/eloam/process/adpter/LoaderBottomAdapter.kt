@@ -39,7 +39,6 @@ class LoaderBottomAdapter(
                 loadState: LoadState,
                 holder: MyViewHolder
             ) {
-
                 when (loadState) {
                     is LoadState.Loading -> {
                         holder.itemView.mlLoader.transitionToEnd()

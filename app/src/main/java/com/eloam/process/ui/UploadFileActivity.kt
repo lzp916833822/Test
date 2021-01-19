@@ -109,6 +109,7 @@ class UploadFileActivity : BaseActivity() {
                 delay(200)
                 runOnUiThread {
                     mIndex = 0
+                    checkBox.isChecked = true
                     mUploadFileInfoAdapter!!.items.clear()
                     onVisibility(mUploadFileInfoAdapter!!, all)
                 }

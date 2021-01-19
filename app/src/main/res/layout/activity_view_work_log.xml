@@ -39,6 +39,7 @@
         android:id="@+id/noDataTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/loading_data_text"
         android:textSize="@dimen/text_size_36"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="parent"

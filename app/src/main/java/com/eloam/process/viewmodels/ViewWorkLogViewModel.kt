@@ -25,8 +25,8 @@ class ViewWorkLogViewModel(
 
     //live data use case
 
-    fun letViewWorkLogObservable(): LiveData<PagingData<DataInfo>> {
-        return dataRepository.letViewWorkLogObservable().cachedIn(viewModelScope)
+    fun letViewWorkLogObservable(): LiveData<PagingData<DataInfo>>?{
+        return dataRepository.letViewWorkLogObservable()?.cachedIn(viewModelScope)
     }
 
 
@@ -35,7 +35,7 @@ class ViewWorkLogViewModel(
             PostRequestBody(page, size, Build.SERIAL, Uuid.getUUID(MyApp.getApplication())!!)
 
         launchOnlyresult({
-            dataRepository.findReportTerminalLog(getRequestBody(GoSonUtils.toJson(body)))
+            dataRepository.findReportTerminalLog(getRequestBody(GoSonUtils.toJson(body)))!!
         }, {
 
         }, {

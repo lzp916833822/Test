@@ -53,7 +53,6 @@ class ViewWorkLogAdapter(private val onVisibility: () -> Unit) :
 
 
         fun onShowView(item: DataInfo, holder: View, onVisibility: () -> Unit) {
-            onVisibility()
             val logName = myLogSdf.format(item.reportTime) + MyLocalLog.MYLOGFILEName
             holder.checkBox.visibility = View.GONE
             holder.testWorkTv.text = item.employeeNo
