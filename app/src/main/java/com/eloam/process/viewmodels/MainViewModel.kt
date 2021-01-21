@@ -128,14 +128,15 @@ class MainViewModel(
     }
 
     /**
+     * isIntiSuccess -1失败执行下一步，-2不用处理，0成功
      * 身份证模块请求usb权限
      */
     private fun requestPermission(usbManager: UsbManager): Int {
-        var isIntiSuccess = -2
+        var isIntiSuccess = -1
         for (device in usbManager.deviceList.values) {
             if ((device.vendorId == 1024 && device.productId == 50010)) {
-                isIntiSuccess = -1
                 if (!usbManager.hasPermission(device)) {
+                    isIntiSuccess = -2
                     val intent = Intent(ACTION_USB_PERMISSION)
                     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
                     usbManager.requestPermission(device, pendingIntent)

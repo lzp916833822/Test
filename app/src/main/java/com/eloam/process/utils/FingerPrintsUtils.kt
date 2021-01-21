@@ -121,7 +121,7 @@ class FingerPrintsUtils {
                     filter.addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED)
                     MyApp.getApplication().registerReceiver(mUsbReceiver, filter)
                     mUsbManager!!.requestPermission(mUsbDevice, mPermissionIntent)
-                    delay(500)
+                    delay(5000)
                     openFingerPrints()
 
                 } else {

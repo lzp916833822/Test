@@ -37,7 +37,7 @@ object UVCCameraLiceo {
     }
 
     fun registerUsbMonitor(mUSBMonitor: USBMonitor) {
-        mUSBMonitor?.register()
+        mUSBMonitor?.register(null)
         synchronized(mSyncOne) {
             if (mCameraRGB != null) {
                 mCameraRGB!!.startPreview()

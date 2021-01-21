@@ -50,6 +50,7 @@ class IcCardUtils {
             }
 
             override fun onParseData(event: SwipeEvent) {
+                LogUtils.i(TAG, "onParseData ${event.value} ${event.type}", WelcomeActivity.UPLOADING_TIME, 1)
 
             }
 
@@ -64,13 +65,11 @@ class IcCardUtils {
             }
 
             override fun onPermission(event: SwipeEvent) {
-                if (event.type == SwipeEvent.TYPE_PERMISSION_GRANTED) {
-                    handler!!.connect()
-                    icCardCallBack.onSuccess()
-                }
+
             }
 
             override fun onCardDetect(arg0: CardDetected) {
+
             }
 
             override fun onPrintStatus(arg0: PrintStatus) {
@@ -80,22 +79,21 @@ class IcCardUtils {
     }
 
     private fun connect(icCardCallBack: IcCardCallBack) {
-        val connect = handler!!.connect()
+        val connect = (handler as UsbHandler).connect()
         LogUtils.i(TAG, "IC Card connect code== $connect", WelcomeActivity.UPLOADING_TIME, 1)
         when (connect) {
             USBConstants.USB_NO_PERMISSION -> {
                 handler!!.checkPermission()
-            }
+                icCardCallBack.onFailure()
+                LogUtils.i(TAG, "IC Card connect code== $connect", WelcomeActivity.UPLOADING_TIME, 1)
 
-            USBConstants.USB_HAS_CONNECTED -> {
-                icCardCallBack.onSuccess()
             }
 
             USBConstants.USB_STATUS_OK -> {
                 icCardCallBack.onSuccess()
             }
             else -> {
-                icCardCallBack.onFailure()
+//                icCardCallBack.onFailure()
             }
         }
 

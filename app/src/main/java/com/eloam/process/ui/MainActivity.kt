@@ -32,6 +32,7 @@ import com.example.scarx.idcardreader.utils.imp.MyCallBack
 import com.face.cn.ImageStack
 import com.face.sweepplus.data.`interface`.HintDialogBtnListener
 import com.serenegiant.usb.IFrameCallback
+import com.serenegiant.usb.OnRequestPermission
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.utils.UIThreadHelper
 import com.zkteco.android.biometric.core.device.ParameterHelper
@@ -122,8 +123,6 @@ class MainActivity : BaseActivity() {
         adInfoBox = ObjectBox.boxStore.boxFor()
 
     }
-
-
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -845,6 +844,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private var isFailure = true//回调多次，只执行一次
     private fun intiIcCard() {
         mainViewModel.intiIcCard(object : IcCardCallBack {
             override fun onSuccess() {
@@ -854,8 +854,17 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onFailure() {
-                postDeviceState(false)
-                next()
+                lifecycleScope.launch {
+                    if (isFailure) {
+                        isFailure = false
+                        delay(500)
+                        LogUtils.d(TAG, "onFailure", 0, 0)
+                        postDeviceState(false)
+                        next()
+                        isFailure = true
+                    }
+                }
+
 
             }
         })
@@ -900,6 +909,9 @@ class MainActivity : BaseActivity() {
     }
 
 
+    /**
+     * state 1刚刚开始打开摄像头；2打开成功，读取信息；0,请求打开usb模块成功，-1失败继续执行下一项，-2不用处理
+     */
     private fun openOrIntiIdCard(it: StatueOpen) {
         if (it.state == 1) {
             if (isOpenIcCard) {
@@ -1077,7 +1089,12 @@ class MainActivity : BaseActivity() {
 
     private fun register() {
         initMonitorListener()
-        mUSBMonitor?.register()
+        mUSBMonitor?.register(object : OnRequestPermission {
+            override fun failure() {
+                postDeviceState(false)
+                next()
+            }
+        })
     }
 
 

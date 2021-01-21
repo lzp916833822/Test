@@ -7,16 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.citic.lib.utils.ISOUtil;
-import com.android.citic.lib.utils.StringUtil;
 import com.imagpay.Apdu_Send;
 import com.imagpay.MessageHandler;
 import com.imagpay.Settings;
 import com.imagpay.SwipeEvent;
 import com.imagpay.SwipeListener;
-import com.imagpay.bean.SBCard;
 import com.imagpay.emv.EMVApp;
 import com.imagpay.emv.EMVCapk;
 import com.imagpay.emv.EMVConstants;
@@ -24,10 +20,6 @@ import com.imagpay.emv.EMVListener;
 import com.imagpay.emv.EMVParam;
 import com.imagpay.emv.EMVResponse;
 import com.imagpay.emv.EMVRevoc;
-import com.imagpay.emvl2test.EmvCoreJNI;
-import com.imagpay.emvl2test.EmvTermParam;
-import com.imagpay.emvl2test.Param;
-import com.imagpay.emvl2test.TransAPDU;
 import com.imagpay.enums.CardDetected;
 import com.imagpay.enums.PrintStatus;
 import com.imagpay.usb.USBConstants;
@@ -241,10 +233,10 @@ public class Four2oneActivity extends Activity {
                     return;
                 }
                 sendMessage("正在读卡, 请勿拔出...");
-                SBCard sbCard = _setting.readSBCard();
-                if (sbCard != null) {
-                    sendMessage(sbCard.toString());
-                }
+//                SBCard sbCard = _setting.readSBCard();
+//                if (sbCard != null) {
+//                    sendMessage(sbCard.toString());
+//                }
             }
         }).start();
 
@@ -264,15 +256,15 @@ public class Four2oneActivity extends Activity {
                 switch (which) {
                     case 0:
                         dialogChoiceIndex = 0;
-                        nfcThread(EmvCoreJNI.EMV_TEST_CONFIG_QPBOC);
+//                        nfcThread(EmvCoreJNI.EMV_TEST_CONFIG_QPBOC);
                         break;
                     case 1:
                         dialogChoiceIndex = 1;
-                        nfcThread(EmvCoreJNI.EMV_TEST_CONFIG_PAYWARE);
+//                        nfcThread(EmvCoreJNI.EMV_TEST_CONFIG_PAYWARE);
                         break;
                     case 2:
                         dialogChoiceIndex = 2;
-                        nfcThread(EmvCoreJNI.EMV_TEST_CONFIG_PAYPASS);
+//                        nfcThread(EmvCoreJNI.EMV_TEST_CONFIG_PAYPASS);
                         break;
                     default:
                         break;
@@ -293,6 +285,7 @@ public class Four2oneActivity extends Activity {
      * nfc读卡
      */
     private void nfc(int kernelConfig) {
+        /**
         String off = _setting.off(Settings.SLOT_NFC);
         sendMessage("off  " + off);
         EmvCoreJNI dds = new EmvCoreJNI();
@@ -429,6 +422,7 @@ public class Four2oneActivity extends Activity {
         // if(resp==0){
         // sendMessage("cardnum:"+ISOUtil.hexString(bPAN,0,PANLen[0]));
         // }
+         */
     }
 
     private void readVersion() {

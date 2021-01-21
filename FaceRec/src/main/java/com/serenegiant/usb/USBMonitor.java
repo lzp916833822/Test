@@ -71,14 +71,15 @@ public final class USBMonitor {
     /**
      * openしているUsbControlBlock
      */
-    private final ConcurrentHashMap<UsbDevice, UsbControlBlock> mCtrlBlocks = new ConcurrentHashMap<UsbDevice, UsbControlBlock>();
-    private final SparseArray<WeakReference<UsbDevice>> mHasPermissions = new SparseArray<WeakReference<UsbDevice>>();
+    private final ConcurrentHashMap<UsbDevice, UsbControlBlock> mCtrlBlocks = new ConcurrentHashMap<>();
+    private final SparseArray<WeakReference<UsbDevice>> mHasPermissions = new SparseArray<>();
 
     private final WeakReference<Context> mWeakContext;
     private final UsbManager mUsbManager;
     private final OnDeviceConnectListener mOnDeviceConnectListener;
     private PendingIntent mPermissionIntent = null;
-    private List<DeviceFilter> mDeviceFilters = new ArrayList<DeviceFilter>();
+    private List<DeviceFilter> mDeviceFilters = new ArrayList<>();
+    private OnRequestPermission mOnRequestPermission;
 
     /**
      * コールバックをワーカースレッドで呼び出すためのハンドラー
@@ -147,6 +148,7 @@ public final class USBMonitor {
      */
     public void destroy() {
         if (DEBUG) Log.i(TAG, "destroy:");
+        mOnRequestPermission = null;
         unregister();
         if (!destroyed) {
             Log.e("zzkong", "----------usbmonitor-------destroy");
@@ -180,9 +182,10 @@ public final class USBMonitor {
      *
      * @throws IllegalStateException
      */
-    public synchronized void register() throws IllegalStateException {
+    public synchronized void register(OnRequestPermission onRequestPermission) throws IllegalStateException {
         if (destroyed) throw new IllegalStateException("already destroyed");
         if (mPermissionIntent == null) {
+            mOnRequestPermission = onRequestPermission;
             if (DEBUG) Log.i(TAG, "register:");
             final Context context = mWeakContext.get();
             if (context != null) {
@@ -543,7 +546,6 @@ public final class USBMonitor {
                 }
             } else {
                 processCancel(device);
-
                 result = false;
             }
         } else {
@@ -551,6 +553,12 @@ public final class USBMonitor {
             result = false;
         }
         return result;
+    }
+
+    private void onFailure(OnRequestPermission onRequestPermission) {
+        if (onRequestPermission != null) {
+            onRequestPermission.failure();
+        }
     }
 
     /**
@@ -582,7 +590,7 @@ public final class USBMonitor {
         public void onReceive(final Context context, final Intent intent) {
             if (destroyed) return;
             final String action = intent.getAction();
-            Log.i("BroadcastReceiver", "action==" + action );
+            Log.i("BroadcastReceiver", "action==" + action);
             if (ACTION_USB_PERMISSION.equals(action)) {
                 // when received the result of requesting USB permission
                 synchronized (USBMonitor.this) {
@@ -690,6 +698,8 @@ public final class USBMonitor {
     private void processCancel(final UsbDevice device) {
         if (destroyed) return;
         if (DEBUG) Log.v(TAG, "processCancel:");
+        if (mOnRequestPermission != null)
+            mOnRequestPermission.failure();
         updatePermission(device, false);
         if (mOnDeviceConnectListener != null) {
             mAsyncHandler.post(new Runnable() {
