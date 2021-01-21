@@ -1,6 +1,5 @@
 package com.eloam.process.ui
 
-import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -155,7 +154,7 @@ class UploadFileActivity : BaseActivity() {
             val myLogInfo = info as MyLogInfo
             if (myLogInfo.isCheck) {
                 if (File(myLogInfo.filePath).exists()) {
-                    showDialog(SweetAlertDialog.NORMAL_TYPE, getString(R.string.loading_waite), "")
+                    showDialog(getString(R.string.loading_waite))
                     mIndex++
                     uploadViewModel.uploadTestFiles(myLogInfo, mIndex)
                 } else {
@@ -171,21 +170,12 @@ class UploadFileActivity : BaseActivity() {
     }
 
 
-    private fun showDialog(
-        type: Int,
-        hintText: String,
-        loading: String
-    ) {
+    private fun showDialog(hintText: String) {
         UIThreadHelper.runOnUiThread {
             if (mSweetAlertDialog == null) {
                 mSweetAlertDialog = SweetAlertDialog(mContext)
             }
-
-            if (TextUtils.isEmpty(loading)) {
-                mSweetAlertDialog?.setView(type, hintText)
-            } else {
-                mSweetAlertDialog?.setView(type, hintText, loading)
-            }
+            mSweetAlertDialog?.setView(SweetAlertDialog.NORMAL_TYPE, hintText)
             mSweetAlertDialog?.setCanceledOnTouchOutside(false)
             if (!mSweetAlertDialog!!.isShowing) {
                 mSweetAlertDialog?.show()

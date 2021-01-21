@@ -876,10 +876,12 @@ class MainActivity : BaseActivity() {
 
     private fun openQrCoed() {
         if (isOpenQrCode) {
+            qr_code_edt.requestFocus()
             qr_code_edt.isFocusable = true
             qr_code_edt.isFocusableInTouchMode = true
         } else {
             postDeviceState(true)
+            qr_code_edt.requestFocus()
             qr_code_edt.isFocusable = true
             qr_code_edt.isFocusableInTouchMode = true
         }
